@@ -3,5 +3,5 @@ export function array<T>(length: number, fn: ((i: number) => T) | T) {
 }
 
 export function randomItem<T>(items: T[], random = Math.random) {
-  return items[random() * items.length - 1 | 0];
+  return items[random() * items.length | 0];
 }

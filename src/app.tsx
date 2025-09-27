@@ -361,6 +361,7 @@ export const App = () => {
             <Show when={computed(() => !!time.value)}>
               <button onClick={reload}>restart</button>
             </Show>
+            <button onClick={() => { nextSeed(); reload(); }}>next seed</button>
           </div>
         </Show>
 
