@@ -20,6 +20,7 @@ import { For, Show } from "@preact/signals/utils";
 import { useReload } from "&hooks/useReload";
 import { SelectKey } from "&ui/SelectKey";
 import { nextSeed, restart } from "&data/random";
+import { useShaker } from "&hooks/useShaker";
 
 const size = 25;
 const box = new Image(32, 23);
@@ -92,6 +93,11 @@ export const App = () => {
   const next = new Quie(4, getFigure);
   const messages = useRef<HTMLDivElement | null>(null);
   const reload = useReload();
+  const [shakerRef, shaker] = useShaker({ x: 0, y: 0, s: 0 }, (el, data) => {
+    const sx = data.s * (Math.random() * 2 - 1);
+    const sy = data.s * (Math.random() * 2 - 1);
+    el.style.transform = `translateX(${data.x + sx}px) translateY(${data.y + sy}px)`;
+  });
 
   let waitTime = 0;
   let combo = 0;
@@ -153,6 +159,7 @@ export const App = () => {
         score.value += append - nowScore;
         nowScore += append;
         lines.value++;
+        shaker.s += 20 * count;
         sound('drop');
         await delay(config.delay.drop);
       };
@@ -169,6 +176,7 @@ export const App = () => {
       canHold.value = true;
       fixes.value++;
       sound('fix');
+      shaker.y += 30;
       drop()
         .then((drops) => {
           const { dropClear, drop } = config.score;
@@ -194,6 +202,7 @@ export const App = () => {
     } else {
       sound('loose');
       end.value = true;
+      shaker.s = 150;
     }
   }
 
@@ -204,6 +213,7 @@ export const App = () => {
       sound('move');
       return true;
     }
+    shaker.x += mX * 5;
     sound('nomove');
     return false;
   }
@@ -217,6 +227,7 @@ export const App = () => {
       sound('move');
       return true;
     }
+    shaker.y += mY * 10;
     sound('nomove');
     return false;
   }
@@ -315,7 +326,7 @@ export const App = () => {
   });
 
   return (
-    <div class="game">
+    <div class="game" ref={shakerRef}>
       <div class="side left">
         <p>Hold</p>
         <Canvas
@@ -361,7 +372,6 @@ export const App = () => {
             <Show when={computed(() => !!time.value)}>
               <button onClick={reload}>restart</button>
             </Show>
-            <button onClick={() => { nextSeed(); reload(); }}>next seed</button>
           </div>
         </Show>
 

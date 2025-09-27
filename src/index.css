@@ -15,6 +15,17 @@ body {
   outline: none;
 }
 
+@keyframes move {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: -800px -1600px;
+  }
+
+}
+
 #app {
   position: absolute;
   inset: 0;
@@ -25,7 +36,8 @@ body {
 }
 
 body {
-  background-color: #333;
+  background: url('./img/back.svg');
+  animation: move 20s linear infinite;
 }
 
 .game {
@@ -91,7 +103,7 @@ canvas {
 .side,
 .content {
   background-color: #070707;
-  box-shadow: 0 0 10px #000;
+  box-shadow: 0 0 10px #0467e9;
 }
 
 .side {
