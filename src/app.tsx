@@ -111,7 +111,7 @@ export const App = () => {
   const lines = signal(0);
   const fixes = signal(0);
   const score = signal(0);
-  const showTime = computed(() => (time.value / 100).toFixed(2));
+  const showTime = computed(() => (time.value / 1000).toFixed(2));
 
   const now = signal<Figure | null>(null);
   const hold = signal<Figure | null>(null);
