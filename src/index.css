@@ -15,6 +15,10 @@ body {
   outline: none;
 }
 
+a {
+  color: #fff;
+}
+
 @keyframes move {
   from {
     background-position: 0 0;
@@ -98,6 +102,11 @@ canvas {
   bottom: 100%;
   background: none;
   border: none;
+}
+
+.down {
+  position: absolute;
+  top: 100%;
 }
 
 .side,

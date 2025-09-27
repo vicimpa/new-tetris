@@ -419,6 +419,7 @@ export const App = () => {
             now.value?.each((v, fX, fY) => block(ctx, fX + x.value, fY + y.value, v));
 
           }} />
+        <a class="down" target="_blank" href="https://github.com/vicimpa/new-tetris">GitHub</a>
       </div>
       <div class="side right">
         <p >Next</p>
