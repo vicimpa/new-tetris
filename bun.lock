@@ -4,6 +4,7 @@
     "": {
       "dependencies": {
         "@preact/signals": "^2.3.1",
+        "preact": "^10.27.2",
       },
       "devDependencies": {
         "rollup-plugin-swc3": "^0.12.1",
