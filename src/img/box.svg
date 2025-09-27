@@ -1,0 +1,6 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M32 0L28 4H4L0 0H32Z" fill="white" fill-opacity="0.25"/>
+<path d="M28 28L32 32H0L4 28H28Z" fill="black" fill-opacity="0.25"/>
+<path d="M32 0V32L28 28V4L32 0Z" fill="black" fill-opacity="0.15"/>
+<path d="M4 4V28L0 32V0L4 4Z" fill="black" fill-opacity="0.15"/>
+</svg>

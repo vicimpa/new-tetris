@@ -1,0 +1,170 @@
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  color: #fff;
+  font-family: monospace;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+}
+
+#app {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  background-color: #333;
+}
+
+.game {
+  position: relative;
+  display: flex;
+}
+
+.content {
+  border: 2px solid #999;
+  border-top: none;
+  padding: 0px 5px;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas {
+  border: 1px solid #555;
+  background: #272a3a;
+  image-rendering: pixelated;
+}
+
+@keyframes msg {
+  from {
+    opacity: 1;
+    transform: scale(1) translateX(0px) translateY(0px);
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(3) translateX(var(--x, 0px)) translateY(var(--y, -50px));
+  }
+}
+
+.message {
+  position: absolute;
+  bottom: 30%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+
+  &>* {
+    position: absolute;
+    animation: msg 1.2s;
+  }
+}
+
+.up {
+  position: absolute;
+  bottom: 100%;
+  background: none;
+  border: none;
+}
+
+.side,
+.content {
+  background-color: #070707;
+  box-shadow: 0 0 10px #000;
+}
+
+.side {
+  position: absolute;
+  top: 0;
+  padding: 5px;
+  border: 2px solid #999;
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal {
+  text-align: center;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: #2f2d3d;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #000;
+  gap: 5px;
+}
+
+table {
+  border: 1px solid #999;
+  width: 150px;
+  padding: 5px 10px;
+}
+
+table td:first-child {
+  text-align: left;
+}
+
+table td:last-child {
+  text-align: right;
+
+  button {
+    width: 100%;
+  }
+}
+
+button {
+  cursor: pointer;
+}
+
+.status {
+  width: 100%;
+  font-size: 10px;
+
+  p {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  small {
+    font-size: 6px;
+  }
+}
+
+.left {
+  right: 100%;
+  border-right: 0;
+  border-radius: 0 0 0 10px;
+  align-items: end;
+}
+
+.right {
+  left: 100%;
+  border-left: 0;
+  border-radius: 0 0 10px 0;
+  align-items: start;
+}

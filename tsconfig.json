@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"allowJs": true,
+		"checkJs": true,
+		"jsx": "react-jsxdev",
+		"jsxImportSource": "preact",
+		"skipLibCheck": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"types": [
+			"vite/client"
+		],
+		"paths": {
+			"&*": [
+				"./src/*"
+			]
+		}
+	},
+	"include": [
+		"./src"
+	],
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		}
+	]
+}
