@@ -51,10 +51,13 @@ export const App = () => {
                   {computed(() => game.time ? 'Resume' : 'Play')}
                 </button>
               </Show>
+              <br />
+              <a target="_blank" class="github" href="https://github.com/vicimpa/new-tetris">
+                <i class="i-github" /> GitHub
+              </a>
             </div>
           </PopupView>
         </Show>
-        <a class="down" target="_blank" href="https://github.com/vicimpa/new-tetris">GitHub</a>
       </div>
       <div class="side right">
         <p>Next</p>
