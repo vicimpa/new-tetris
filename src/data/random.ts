@@ -1,10 +1,10 @@
-import { ref } from "&utils/function";
-import { makeRandom } from "&utils/random";
+import { refFunction } from "&utils/function";
+import { makeRandom } from "&utils/math";
 
 let seed = +location.hash.slice(1) | 0;
 let nextSeedValue = Math.random() * 100000000 | 0;
 
-export const random = ref(makeRandom(seed));
+export const random = refFunction(makeRandom(seed));
 
 export const nextSeed = () => {
   location.hash = `#${seed = nextSeedValue}`;

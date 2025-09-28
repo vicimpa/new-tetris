@@ -3,39 +3,52 @@ export const gain = ctx.createGain();
 
 gain.connect(ctx.destination);
 
-const source = Object.entries(import.meta.glob('./*.mp3', { eager: true }))
-  .reduce((acc, [key, { default: value }]: [string, { default: string; }]) => {
-    let buff: AudioBuffer | null = null;
+function makeSound(src: string) {
+  let buff: AudioBuffer | null = null;
 
-    Promise.resolve(value)
-      .then(fetch)
-      .then(r => r.arrayBuffer())
-      .then(b => ctx.decodeAudioData(b))
-      .then(b => buff = b);
+  Promise.resolve(src)
+    .then(fetch)
+    .then(r => r.arrayBuffer())
+    .then(b => ctx.decodeAudioData(b))
+    .then(b => buff = b);
 
-    return {
-      ...acc, [key.replace(/.*\/([^\.]+)\.\w+$/, '$1')]: {
-        play(loop?: true) {
-          if (!buff)
-            return;
+  return {
+    play({ loop = false, rate = 1 } = {}) {
+      if (!buff)
+        return;
 
-          const node = ctx.createBufferSource();
-          node.onended = () => {
-            node.disconnect(gain);
-          };
-          node.connect(gain);
-          node.buffer = buff;
-          node.loop = loop ?? false;
-          node.start();
+      const node = ctx.createBufferSource();
+      node.onended = () => {
+        node.disconnect(gain);
+      };
+      node.connect(gain);
+      node.buffer = buff;
+      node.playbackRate.value = rate;
+      node.loop = loop ?? false;
+      node.start();
 
-          return () => {
-            node.stop();
-          };
-        }
-      }
-    };
-  }, {} as Record<string, { play(): void | (() => void); }>);
+      return () => {
+        node.stop();
+      };
+    }
+  };
+}
 
-export function sound(name: string) {
-  source[name]?.play();
+const source = import.meta.glob('./*.mp3', {
+  eager: true
+}) as Record<string, typeof import('*.mp3')>;
+
+const basename = (path: string) => (
+  path.replace(/.*\/([\w]+)\.[\w]+$/, '$1')
+);
+
+const sounds = Object.entries(source)
+  .reduce((acc, [key, { default: value }]) => (
+    Object.assign(acc, {
+      [basename(key)]: makeSound(value)
+    })
+  ), {} as Record<string, ReturnType<typeof makeSound>>);
+
+export function sound(name: string, options?: Parameters<(typeof sounds)[string]['play']>[0]) {
+  sounds[name]?.play(options);
 }

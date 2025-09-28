@@ -4,5 +4,5 @@ import { useEvent } from "./useEvent";
 
 export function useLooper(fn: FrameLoop) {
   const fnRef = useEvent(fn);
-  useEffect(() => looper(fnRef), []);
+  useEffect(() => looper(fnRef), [fnRef]);
 }

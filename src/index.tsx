@@ -3,8 +3,10 @@ import "preact/debug";
 import { render } from "preact";
 import { App } from "./app";
 import { find } from "&utils/dom";
-import { sound } from "&sound";
+import { PopupProvider } from "&ui/Popup";
 
-render(<App />, find('#app'));
-
-sound('');
+render((
+  <PopupProvider>
+    <App />
+  </PopupProvider>
+), find('#app'));

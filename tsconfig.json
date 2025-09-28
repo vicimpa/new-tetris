@@ -11,6 +11,7 @@
 		"skipLibCheck": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
+		"strict": true,
 		"types": [
 			"vite/client"
 		],

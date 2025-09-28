@@ -1,6 +1,8 @@
 import { array } from "&utils/array";
 import { range } from "&utils/range";
 
+export type EachFunction<R = any> = (v: number, x: number, y: number) => R;
+
 export class Matrix {
   readonly raw: number[][];
 
@@ -26,6 +28,8 @@ export class Matrix {
     v.each((v, dX, dY) => {
       if (!v) return;
       if (!this.set(x + dX, y + dY, v))
+        outside = true;
+      if (y + dY >= 20)
         outside = true;
     });
 
@@ -54,7 +58,7 @@ export class Matrix {
     }
   }
 
-  each(fn: (v: number, x: number, y: number) => any) {
+  each(fn: EachFunction) {
     for (const x of range(this.width)) {
       for (const y of range(this.height)) {
         fn(this.get(x, y), x, y);
@@ -64,7 +68,11 @@ export class Matrix {
     return this;
   }
 
-  fill(fn: number | ((v: number, x: number, y: number) => number)) {
+  empty() {
+    return this.raw.every(e => !e);
+  }
+
+  fill(fn: number | EachFunction<number>) {
     if (typeof fn !== 'function') {
       const value = fn;
       fn = () => value;
@@ -73,7 +81,7 @@ export class Matrix {
     return this.each((v, x, y) => this.set(x, y, fn(v, x, y)));
   }
 
-  dropRow(y: number, up = true) {
+  dropRow(y: number, up = false) {
     if (!this.raw[y])
       return false;
 

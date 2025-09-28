@@ -4,6 +4,7 @@
     "": {
       "dependencies": {
         "@preact/signals": "^2.3.1",
+        "@vicimpa/decorators": "^0.0.12",
         "preact": "^10.27.2",
       },
       "devDependencies": {
@@ -150,6 +151,10 @@
     "@swc/types": ["@swc/types@0.1.25", "", { "dependencies": { "@swc/counter": "^0.1.3" } }, "sha512-iAoY/qRhNH8a/hBvm3zKj9qQ4oc2+3w1unPJa2XvTK3XjeLXtzcCingVPw/9e5mn1+0yPqxcBGp9Jf0pkfMb1g=="],
 
     "@types/estree": ["@types/estree@1.0.8", "", {}, "sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w=="],
+
+    "@vicimpa/decorators": ["@vicimpa/decorators@0.0.12", "", { "dependencies": { "@preact/signals-core": "*", "@vicimpa/week-store": "*" } }, "sha512-YilBCKaifoUJRw6iMDfMvKfMY0vhhCQ2qwCAk+DhvUYHlW5tjDFGKEfc0eS70AhSFzA7aACWaVjKs95mu4VFaA=="],
+
+    "@vicimpa/week-store": ["@vicimpa/week-store@0.0.10", "", {}, "sha512-AdiiLqJBy71VEr8lZ9wfRSxGtrb1QTr0fLuKXp87/mzIufDwbTmS7nEtjh/CdVttZkcYam3a/NZM9OfHdCUMeQ=="],
 
     "debug": ["debug@4.4.3", "", { "dependencies": { "ms": "^2.1.3" } }, "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="],
 

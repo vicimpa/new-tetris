@@ -5,8 +5,9 @@ export const config = {
   score: {
     move: 1,
     dash: 2,
-    drop: [0, 100, 300, 700, 1600],
-    dropClear: [0, 800, 1200, 1800, 2000],
+    drop: [0, 100, 300, 700, 1200],
+    clean: [0, 200, 400, 600, 800],
+    combo: [1, 2, 4, 6, 8, 10]
   },
   controls: {
     left: 'KeyA',

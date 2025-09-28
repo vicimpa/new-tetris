@@ -1,33 +1,44 @@
+import { loadImage } from "&utils/image";
+import boxSrc from "&img/box.svg";
+
 const context = Symbol('context');
 
+type Canvas = HTMLCanvasElement & {
+  [context]?: CanvasRenderingContext2D | Render | null;
+};
+
+const box = await loadImage(boxSrc, 32, 32, true);
+
 export class Render extends CanvasRenderingContext2D {
-  readonly currentScale: number = 1;
+  get width() { return this.canvas.width; }
+  set width(v) { this.canvas.width = v; }
 
-  get width() {
-    return this.canvas.width / this.currentScale;
+  get height() { return this.canvas.height; }
+  set height(v) { this.canvas.height = v; }
+
+  drawGrid(x: number, y: number, size: number, color: string, opacity = 1, line = 1) {
+    this.globalAlpha = opacity;
+    this.strokeStyle = color;
+    this.lineWidth = line;
+    this.strokeRect(x * size, y * size, size, size);
   }
 
-  set width(v) {
-    this.canvas.width = v * this.currentScale;
+  drawBlock(x: number, y: number, size: number, color: string, opacity = 1) {
+    this.globalAlpha = opacity;
+    this.fillStyle = color;
+    this.fillRect(x * size, y * size, size, size);
+    this.drawImage(box, x * size, y * size, size, size);
   }
 
-  get height() {
-    return this.canvas.height / this.currentScale;
-  }
-
-  set height(v) {
-    this.canvas.height = v * this.currentScale;
-  }
-
-  static fromCanvas(can?: HTMLCanvasElement, scale: number = 1): Render | undefined {
-    if (!can) return;
-    if (can[context])
-      return can[context];
-    const ctx = can.getContext('2d');
-    if (!ctx) return;
-    return can[context] = Object.assign(
-      Object.setPrototypeOf(ctx, this.prototype),
-      { currentScale: scale }
+  static fromCanvas(can?: Canvas | null): Render | undefined {
+    let ctx: CanvasRenderingContext2D | null | undefined = null, proto = this.prototype;
+    return can?.[context] ?? (
+      ctx = can?.getContext('2d'),
+      can && (
+        can[context] = (
+          ctx && Object.setPrototypeOf(ctx, proto)
+        )
+      )
     );
   }
 }

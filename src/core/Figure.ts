@@ -1,43 +1,45 @@
 import { clone } from "&utils/clone";
+import { mod } from "&utils/math";
 import { range } from "&utils/range";
 import { Matrix } from "./Matrix";
+import { Rect } from "./Rect";
+
+function rotate(r: number, x: number, y: number, n: number) {
+  switch (r) {
+    case 0: return [x, y] as const;
+    case 1: return [n - 1 - y, x] as const;
+    case 2: return [n - 1 - x, n - 1 - y] as const;
+    case 3: return [y, n - 1 - x] as const;
+    default: throw new Error('Invalid rotation');
+  }
+}
 
 export class Figure extends Matrix {
   static readonly colors: string[] = [];
 
-  constructor(public readonly size) {
+  private _rotation = 0;
+
+  get rotation() { return this._rotation; }
+
+  constructor(public readonly size: number) {
     super(size, size);
   }
 
-  rect() {
-    let sx = Infinity, sy = Infinity, ex = -Infinity, ey = -Infinity;
-    this.each((v, x, y) => {
-      if (!v) return;
-      sx = Math.min(x, sx);
-      sy = Math.min(y, sy);
-      ex = Math.max(x + 1, ex);
-      ey = Math.max(y + 1, ey);
-    });
-
-    return new DOMRect(sx, sy, ex - sx, ey - sy);
-  }
-
   collide(dX: number, dY: number, matrix: Matrix) {
-    for (const X of range(this.size)) {
-      for (const Y of range(this.size)) {
-        if (!this.get(X, Y))
-          continue;
-
-        let x = X + dX;
-        let y = Y + dY;
-
+    for (const x of range(this.size)) {
+      for (const y of range(this.size)) {
+        const v = this.get(x, y);
+        if (!v) continue;
         if (
           false
-          || x < 0
-          || x > matrix.width - 1
-          || y > matrix.height - 1
-          || matrix.get(x, y) > 0
+          || dX + x < 0
+          || dY + y < 0
+          || dX + x > matrix.width - 1
+          || dY + y > matrix.height - 1
         ) return true;
+
+        if (matrix.get(dX + x, dY + y))
+          return true;
       }
     }
     return false;
@@ -49,25 +51,24 @@ export class Figure extends Matrix {
   }
 
   rotate(d: number) {
-    d |= 0;
+    const copy = structuredClone(this.raw);
+    this._rotation = mod(this._rotation + d, 4);
 
-    if (!d) return this;
-    const sign = Math.sign(d);
-
-    do {
-      const copy = clone(this);
-
-      for (const x of range(this.size)) {
-        for (const y of range(this.size)) {
-          if (sign > 0)
-            this.set(y, x, copy.get(x, this.size - 1 - y));
-          if (sign < 0)
-            this.set(y, x, copy.get(this.size - 1 - x, y));
-        }
-      }
-    } while (d -= sign);
+    this.fill((_, x, y) => {
+      const [rx, ry] = rotate(mod(d, 4), x, y, this.size);
+      return copy[ry][rx];
+    });
 
     return this;
+  }
+
+  rect() {
+    const rect = new Rect();
+    this.each((v, x, y) => {
+      if (!v) return;
+      rect.limit(x, y);
+    });
+    return rect;
   }
 }
 
@@ -78,6 +79,6 @@ export function figure(...rows: string[]) {
   );
 
   return new Figure(size).fill((_, x, y) => (
-    +(rows[y]?.[x] === '#')
+    +(rows[size - 1 - y]?.[x] === '#')
   ));
 }

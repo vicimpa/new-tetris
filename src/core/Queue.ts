@@ -1,11 +1,11 @@
 import { array } from "&utils/array";
 import { signal } from "@preact/signals";
 
-export class Quie<T> {
+export class Queue<T> {
   readonly raw: T[];
   readonly v = signal(0);
 
-  constructor(size: number, private _fn: () => T) {
+  constructor(public size: number, private _fn: () => T) {
     this.raw = array(size, _fn);
   }
 
@@ -22,7 +22,7 @@ export class Quie<T> {
   }
 
   shift() {
-    const elem = this.raw.shift();
+    const elem = this.raw.shift()!;
     this.raw.push(this._fn());
     this.v.value++;
     return elem;

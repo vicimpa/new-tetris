@@ -1,51 +1,80 @@
-import { useEffect, useMemo } from "preact/hooks";
-import { effect, signal, useSignalEffect } from "@preact/signals";
-import { useEvent } from "./useEvent";
-import { useSignalRef } from "@preact/signals/utils";
-import { looper } from "&utils/looper";
+import { Game } from "&core/Game";
+import { filter } from "&utils/filter";
+import { dispose } from "&utils/function";
+import { useLooper } from "./useLooper";
+import { useEffect, useMemo, useRef } from "preact/hooks";
 
-export const useShaker = <T extends Record<string, number>>(
-  initial: T,
-  func: (el: HTMLElement, data: Readonly<T>) => any
-) => {
-  const refFunc = useEvent(func);
-  const ref = useSignalRef<HTMLElement | null>(null);
-  const data = useMemo(() => (
-    Object.entries(initial)
-      .reduce((acc, [key, init]) => {
-        const d = signal(init);
-        Object.defineProperty(acc, key, {
-          get() {
-            return d.value;
-          },
-          set(v) {
-            d.value = v;
-          }
-        });
-        return acc;
-      }, {} as T)
-  ), []);
+type ShackerRef = (<T extends HTMLElement>(current: T | null) => any) & {
+  pushX(x: number): void;
+  pushY(y: number): void;
+  pushS(s: number): void;
+};
 
+export function useShaker(
+  game: Game,
+): ShackerRef {
+  const ref = useRef<HTMLElement>(null);
+
+  const data = useMemo(() => ({
+    x: 0,
+    y: 0,
+    s: 0,
+    fx: filter(10),
+    fy: filter(10),
+    sx: filter(3),
+    sy: filter(3),
+  }), []);
 
   useEffect(() => (
-    effect(() => {
-      if (!ref.value) return;
-      refFunc(ref.value, data);
-    })
-  ));
+    dispose(
+      game.subscribeMany({
+        move(x, y, moved) {
+          data.x += 5 * x * +!moved;
+          data.y += 5 * y * +!moved;
+        },
+        fix() {
+          data.s += 5;
+          data.y -= 10;
+        },
+        drop(count) {
+          data.s += 10 * count;
+        },
+        dash([fig, _x, y]) {
+          if (!fig) return;
+          data.y -= (y - this.lastY) * 3;
+        }
+      }),
+    )
+  ), [game]);
 
-  useSignalEffect(() => {
-    if (!ref.value) return;
+  useLooper((delta) => {
+    if (Math.abs(data.x) < 1) data.x = 0;
+    if (Math.abs(data.y) < 1) data.y = 0;
+    if (Math.abs(data.s) < 1) data.s = 0;
 
-    return looper((dtime) => {
-      for (const key in initial) {
-        const delta = data[key] - initial[key];
-        (data as any)[key] = data[key] - (delta * dtime * .01);
-        if (Math.abs(delta) < 1)
-          data[key] = initial[key];
-      }
-    });
+    data.x -= data.x * delta * .01;
+    data.y -= data.y * delta * .01;
+    data.s -= data.s * delta * .01;
+
+    const { current: elem } = ref;
+    if (!elem) return;
+    const x = data.fx(data.x) + data.sx(Math.random() * data.s);
+    const y = data.fy(data.y) + data.sx(Math.random() * data.s);
+    elem.style.transform = `translateX(${x}px) translateY(${-y}px)`;
   });
 
-  return [<T extends HTMLElement>(el: T) => { ref.value = el; }, data] as const;
-};
+  return Object.assign(
+    (current: any) => { ref.current = current; },
+    {
+      pushX(v: number) {
+        data.x += v;
+      },
+      pushY(v: number) {
+        data.y += v;
+      },
+      pushS(v: number) {
+        data.s += v;
+      }
+    }
+  );
+}

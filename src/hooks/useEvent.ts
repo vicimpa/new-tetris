@@ -1,12 +1,6 @@
-import { useCallback, useRef } from "preact/hooks";
+import { BaseFunction, refFunction } from "&utils/function";
+import { useMemo } from "preact/hooks";
 
-export function useEvent<T extends (...args: any[]) => any>(fn: T) {
-  const ref = useRef(fn);
-  ref.current = fn;
-  return useCallback(
-    function (...args: any[]) {
-      return ref.current.apply(this, args);
-    } as T,
-    []
-  );
+export function useEvent<T extends BaseFunction>(current: T) {
+  return Object.assign(useMemo(() => refFunction(current), []), { current });
 }

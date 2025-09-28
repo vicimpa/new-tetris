@@ -1,7 +1,7 @@
-export type BaseFunction = () => any;
+export type EmptyFunction = () => any;
 
-export function nextTick(fn: BaseFunction) {
-  var _fn: BaseFunction | null = fn;
+export function nextTick(fn: EmptyFunction) {
+  var _fn: EmptyFunction | null = fn;
 
   Promise.resolve()
     .then(() => _fn?.());

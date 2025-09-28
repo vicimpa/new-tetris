@@ -6,7 +6,7 @@ import { random } from "./random";
 export const figures = [
   figure(
     '    ',
-    '####'
+    '####',
   ).color('#1FEFEC'),
 
   figure(
@@ -25,8 +25,8 @@ export const figures = [
   ).color('#EDF10A'),
 
   figure(
-    ' ##',
     '## ',
+    ' ##',
   ).color('#20F307'),
 
   figure(
@@ -35,11 +35,11 @@ export const figures = [
   ).color('#bc97d5ff'),
 
   figure(
-    '## ',
     ' ##',
+    '## ',
   ).color('#E90007'),
 ];
 
 export function getFigure() {
-  return clone(randomItem(figures, random)).rotate(random() * 3);
+  return clone(randomItem(figures, random));
 }
