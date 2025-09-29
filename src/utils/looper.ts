@@ -7,8 +7,8 @@ export function looper(fn: FrameLoop) {
   function _fn(now = performance.now()) {
     raf = requestAnimationFrame(_fn);
     var delta = now - time;
-    if (delta < 100)
-      fn(delta, time = now);
+    time = now;
+    if (delta < 100) fn(delta, time);
   }
 
   return () => {
