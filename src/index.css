@@ -33,7 +33,6 @@ a {
   to {
     background-position: -800px -1600px;
   }
-
 }
 
 #app {
@@ -238,6 +237,53 @@ body {
 
 .stats small {
   font-size: .6em;
+}
+
+.big {
+  font-size: 20px;
+}
+
+.big p {
+  height: 60px;
+  line-height: 60px;
+  text-transform: none;
+  padding-right: 10px;
+}
+
+.big p b {
+  font-size: 1.5em;
+}
+
+@keyframes combo-show {
+  from {
+    opacity: 0;
+    color: #fff;
+    transform: scale(0) translateY(50px);
+  }
+
+  to {
+    opacity: 1;
+    color: #fff;
+    transform: scale(1) translateY(0px);
+  }
+}
+
+@keyframes drop-show {
+  from {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  to {
+    transform: translateY(0px);
+  }
+}
+
+.big .drop {
+  animation: drop-show .2s forwards;
 }
 
 button {

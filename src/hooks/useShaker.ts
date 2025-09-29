@@ -42,7 +42,11 @@ export function useShaker(
         dash([fig, _x, y]) {
           if (!fig) return;
           data.y -= (y - this.lastY) * 3;
-        }
+        },
+        loose() {
+          data.y -= 100;
+          data.s += 200;
+        },
       }),
     )
   ), [game]);

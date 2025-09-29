@@ -1,14 +1,52 @@
 import { Game } from "&core/Game";
 import { Stats } from "&core/Stats";
-import { computed } from "@preact/signals";
-import { real } from "@vicimpa/decorators";
+import { clamp } from "&utils/math";
+import { Unsignal } from "&utils/signals";
+import { computed, useComputed, useSignal } from "@preact/signals";
+import { HTMLAttributes } from "preact";
+import { useEffect } from "preact/hooks";
 
+export type BigStatsProps = {
+  stats: Stats;
+};
 
-const BigStats = () => {
+const BigStats = ({ stats }: BigStatsProps) => {
+  const drop = useSignal(0);
+  const count = useSignal(0);
+  const dropName = useComputed(() => ['', 'Signle', 'Double', 'Tripple', 'Quad'][drop.value]);
+  const combo = useComputed(() => clamp(stats.combo - 1, 0, Infinity));
+
+  useEffect(() => (
+    stats.subscribeMany({
+      drop(lines) {
+        drop.value = lines;
+        count.value++;
+      }
+    })
+  ));
+
   return (
     <div class="big">
-      <p class="drop"></p>
-      <p class="combo"></p>
+      <p key={computed(() => count.value)} class="drop">{dropName}</p>
+      {computed(() => (
+        <p
+          class="combo"
+          style={(
+            combo.value > 0 ? {
+              opacity: 1,
+              transform: 'scale(1) translateY(0px)',
+              color: '#fff',
+              transition: '0s'
+            } : {
+              opacity: 0,
+              transform: 'scale(3) translateY(-30px)',
+              color: '#f00',
+              transition: '.2s',
+            })}
+        >
+          Combo <b>x{combo}</b>
+        </p>
+      ))}
     </div>
   );
 };
@@ -51,6 +89,7 @@ export type StatsProps = {
 
 export const StatsView = ({ game, stats }: StatsProps) => (
   <div class="stats">
+    <BigStats stats={stats} />
     <p class="score">Score<br /><b>{computed(() => numeric(stats.score))}</b></p>
     <p class="lines">Lines<br /><b>{computed(() => numeric(stats.lines))}</b></p>
     <p class="fixed">Fixes<br /><b>{computed(() => numeric(stats.fixed))}</b></p>
