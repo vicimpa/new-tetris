@@ -142,7 +142,10 @@ export class Game extends Observer {
       if (y < 20) return;
       if (v) lose = true;
     });
-    if (lose) this.loose();
+    if (lose) {
+      this.loose();
+      this.now = null;
+    }
     return !lose;
   }
 
