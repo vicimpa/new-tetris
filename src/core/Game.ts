@@ -150,18 +150,29 @@ export class Game extends Observer {
     var map = this.map;
     let count = 0;
 
-    for (let y = this.height - 1; y >= 0; y--) {
-      if (map.getRow(y).every(e => e > 0)) {
-        const copy = clone(map);
-        copy.dropRow(y++);
-        count++;
-        map = copy;
-      };
+    for (const y of this.dropLines().keys()) {
+      const copy = clone(map);
+      copy.dropRow(y - count++);
+      map = copy;
     }
 
     this.map = map;
 
     return count;
+  }
+
+  @observe
+  dropLines() {
+    const map = new Map<number, number[]>();
+
+    for (let y = 0; y < this.map.height; y++) {
+      const row = this.map.getRow(y);
+      if (row.every(e => e > 0)) {
+        map.set(y, row);
+      };
+    }
+
+    return map;
   }
 
   @observe
@@ -189,8 +200,8 @@ export class Game extends Observer {
       this.time += delta;
       this.waitTime += delta;
 
-      if (keyPress('Space')) this.dash();
-      if (keyPress('KeyC')) this.hold();
+      if (keyPress(['Space', 'KeyX'])) this.dash();
+      if (keyPress(['Enter', 'KeyC'])) this.hold();
       if (keyPress(['KeyW', 'ArrowUp'])) this.rotate();
       if (keyPress(['ArrowLeft', 'ArrowRight', 'KeyA', 'KeyD'], 20, 6))
         this.move(keysAxis(['KeyA', 'ArrowLeft'], ['KeyD', 'ArrowRight']), 0);

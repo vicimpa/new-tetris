@@ -1,6 +1,7 @@
 import { Game } from "&core/Game";
 import { colors } from "&data/colors";
 import { Canvas } from "./Canvas";
+import { Particles } from "./Particles";
 
 export type GameMapProps = {
   game: Game;
@@ -45,6 +46,7 @@ export const GameMap = ({ game, size = 25, showY = 20 }: GameMapProps) => {
           });
         }}
       />
+      <Particles size={size} game={game} showY={showY} />
     </div>
   );
 };

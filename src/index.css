@@ -140,7 +140,7 @@ body {
 }
 
 .popup-container {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   transition: .3s;
@@ -218,18 +218,38 @@ body {
   border-radius: 10px;
 }
 
-.stats {
-  padding: 0px 20px;
-  text-align: right;
+.stats,
+.helps {
+  padding: 0px 10px;
   position: absolute;
   bottom: 0;
-  right: 100%;
   white-space: nowrap;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  font-size: 12px;
 }
+
+.stats {
+  text-align: right;
+  right: 100%;
+  font-size: 12px;
+  gap: 20px;
+}
+
+.helps {
+  text-align: left;
+  left: 100%;
+  font-size: 10px;
+  gap: 4px;
+  text-transform: none;
+}
+
+.helps b {
+  display: block;
+  font-size: 1.2em;
+  margin-top: -2px;
+  padding-left: 8px;
+}
+
 
 .stats b {
   font-size: 2.2em;
@@ -296,4 +316,8 @@ button {
 
 button:not(:disabled) {
   cursor: pointer;
+}
+
+.particles {
+  position: absolute;
 }

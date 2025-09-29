@@ -1,6 +1,5 @@
 import { nextTick } from "&utils/async";
 import { BaseFunction, dispose } from "&utils/function";
-import { useEffect } from "preact/hooks";
 
 type MethodKeys<T extends object> = {
   [K in keyof T]: T[K] extends BaseFunction ? K : never
