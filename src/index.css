@@ -42,6 +42,7 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transform: scale(calc(100vmin / 650px));
 }
 
 body {
