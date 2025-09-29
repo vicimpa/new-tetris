@@ -13,7 +13,7 @@
 *Particle effects on line clear.*
 
 ![Screenshot 3](screen/screen3.png)
-*Pause modal and UI components.*
+*Particle effects on dash figure.*
 
 ---
 
