@@ -1,9 +1,7 @@
 import { Game } from "&core/Game";
 import { Stats } from "&core/Stats";
 import { clamp } from "&utils/math";
-import { Unsignal } from "&utils/signals";
 import { computed, useComputed, useSignal } from "@preact/signals";
-import { HTMLAttributes } from "preact";
 import { useEffect } from "preact/hooks";
 
 export type BigStatsProps = {
@@ -39,7 +37,7 @@ const BigStats = ({ stats }: BigStatsProps) => {
               transition: '0s'
             } : {
               opacity: 0,
-              transform: 'scale(3) translateY(-30px)',
+              transform: 'scale(.6) translateY(-30px)',
               color: '#f00',
               transition: '.2s',
             })}
@@ -56,15 +54,22 @@ function pad(n: number, c: number) {
 }
 
 function time(n: number) {
-  let ms = (n % 1000) | 0;
-  n /= 1000;
-  if (n < 60) return (<>{n | 0}<small> {pad(ms, 3)} s</small></>);
-  let s = (n % 60) | 0;
-  n /= 60;
-  if (n < 60) return (<>{n | 0}<small> {pad(s, 2)} m</small></>);
-  let m = (n % 60) | 0;
-  n /= 60;
-  return (<>{(n | 0)}<small> {pad(m, 2)} h</small></>);
+  const ms = (n % 1000) | 0;
+  n = (n / 1000) | 0;
+
+  const s = n % 60;
+  n = (n / 60) | 0;
+
+  const m = n % 60;
+  const h = (n / 60) | 0;
+
+  return (
+    <span>
+      {h > 0 && `${h}:`}
+      {m > 0 && `${pad(m, +(h > 0) * 2)}:`}
+      {pad(s, +(m > 0) * 2)}.<small>{pad(ms, 3)}</small>
+    </span>
+  );
 }
 
 function numeric(n: number) {
@@ -90,9 +95,10 @@ export type StatsProps = {
 export const StatsView = ({ game, stats }: StatsProps) => (
   <div class="stats">
     <BigStats stats={stats} />
+    <p class="hiscore">Hiscore<br /><b>{computed(() => numeric(stats.hiscore))}</b></p>
     <p class="score">Score<br /><b>{computed(() => numeric(stats.score))}</b></p>
+    <p class="time">Time<br /><b>{computed(() => time(game.time))}</b></p>
     <p class="lines">Lines<br /><b>{computed(() => numeric(stats.lines))}</b></p>
     <p class="fixed">Fixes<br /><b>{computed(() => numeric(stats.fixed))}</b></p>
-    <p class="time">Time<br /><b>{computed(() => time(game.time))}</b></p>
   </div>
 );

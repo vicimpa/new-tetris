@@ -4,7 +4,9 @@
     "": {
       "dependencies": {
         "@preact/signals": "^2.3.1",
+        "@vicimpa/data-pack": "^0.0.11",
         "@vicimpa/decorators": "^0.0.12",
+        "@vicimpa/math": "^0.0.10",
         "preact": "^10.27.2",
       },
       "devDependencies": {
@@ -152,7 +154,13 @@
 
     "@types/estree": ["@types/estree@1.0.8", "", {}, "sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w=="],
 
+    "@vicimpa/data-buffer": ["@vicimpa/data-buffer@0.0.7", "", {}, "sha512-8qT5KM83VAQ2AoWLsltNSvaO1uAUaglknCL0pCP8G60gfKCzaQB47LQG5AoPOK6bDatch7BYztB1B+QWqwi53w=="],
+
+    "@vicimpa/data-pack": ["@vicimpa/data-pack@0.0.11", "", { "dependencies": { "@vicimpa/data-buffer": "*" } }, "sha512-r+ZSXRyk2/p8nMsTpIMnOLa03xUg7ZiS4B9sRS9zIHj1oQZYy0WVabT9JpDaU/Fq7RntK4ZIppylCPo+QWuQ0g=="],
+
     "@vicimpa/decorators": ["@vicimpa/decorators@0.0.12", "", { "dependencies": { "@preact/signals-core": "*", "@vicimpa/week-store": "*" } }, "sha512-YilBCKaifoUJRw6iMDfMvKfMY0vhhCQ2qwCAk+DhvUYHlW5tjDFGKEfc0eS70AhSFzA7aACWaVjKs95mu4VFaA=="],
+
+    "@vicimpa/math": ["@vicimpa/math@0.0.10", "", {}, "sha512-Wr7bvKu4uWLYSj17ESFOegzsU2fWEX2+5KB0zhRihHfrKi/wo1RzCfnYUwyc8VAvPW56Z5L22N3QkeKom4CdwQ=="],
 
     "@vicimpa/week-store": ["@vicimpa/week-store@0.0.10", "", {}, "sha512-AdiiLqJBy71VEr8lZ9wfRSxGtrb1QTr0fLuKXp87/mzIufDwbTmS7nEtjh/CdVttZkcYam3a/NZM9OfHdCUMeQ=="],
 

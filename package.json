@@ -14,7 +14,9 @@
 	},
 	"dependencies": {
 		"@preact/signals": "^2.3.1",
+		"@vicimpa/data-pack": "^0.0.11",
 		"@vicimpa/decorators": "^0.0.12",
+		"@vicimpa/math": "^0.0.10",
 		"preact": "^10.27.2"
 	}
 }

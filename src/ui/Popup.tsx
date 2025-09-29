@@ -82,7 +82,6 @@ export function usePopup() {
         active = false;
         disposes.delete(close);
         shower.value = shower.peek().filter(e => e.key !== node.key);
-        console.log('Close');
       };
 
       const node = (
@@ -94,7 +93,6 @@ export function usePopup() {
         </PopupView>
       );
 
-      console.log('Open');
       shower.value = [...shower.peek(), node];
       disposes.add(close);
 

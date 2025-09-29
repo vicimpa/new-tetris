@@ -55,7 +55,6 @@ class Point {
   }
 
   static dropRow(items: Set<Point>, size: number, y: number, row: number[]) {
-    console.log(row);
     row.forEach((v, x) => {
       for (const _ of range(Math.random() * 100 + 100)) {
         const point = new Point(items);
@@ -122,7 +121,6 @@ export const Particles = ({ size, game, showY }: ParticlesProps) => {
         ctx.transform(1, 0, 0, -1, 0, ctx.height);
         items.forEach(p => p.update(delta));
         items.forEach(p => p.render(ctx));
-        console.log(items.size);
       }}
     />
   );
