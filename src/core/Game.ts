@@ -131,18 +131,19 @@ export class Game extends Observer {
   fix() {
     const { now, x, y, map } = this;
     if (!now) return false;
-    if (!map.setMatrix(x, y, now)) {
-      this.now = null;
-      this.canHold = true;
-      this.waitTime = 0;
-      this.drop();
-      this.setNow();
-      return true;
-    } else {
-      this.now = null;
-      this.loose();
-      return false;
-    }
+    map.setMatrix(x, y, now);
+    this.now = null;
+    this.canHold = true;
+    this.waitTime = 0;
+    this.drop();
+    this.setNow();
+    let lose = false;
+    this.map.each((v, _x, y) => {
+      if (y < 20) return;
+      if (v) lose = true;
+    });
+    if (lose) this.loose();
+    return !lose;
   }
 
   @observe
