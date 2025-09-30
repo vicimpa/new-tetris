@@ -6,7 +6,7 @@ export function mod(a: number, n: number): number {
   return ((a % n) + n) % n;
 }
 
-export function makeRandom(s = Math.random() * 10000000000000) {
+export function makeRandom(s: number) {
   var mask = 0xffffffff;
   var m_w = (123456789 + s) & mask;
   var m_z = (987654321 - s) & mask;
@@ -20,3 +20,13 @@ export function makeRandom(s = Math.random() * 10000000000000) {
     return result;
   };
 }
+
+function rand(max: number): number;
+function rand(min: number, max: number): number;
+function rand(min: number, max?: number): number {
+  if (max === undefined)
+    return Math.random() * min;
+  return Math.random() * (max - min) + min;
+}
+
+export { rand };

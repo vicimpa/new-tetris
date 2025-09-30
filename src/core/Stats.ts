@@ -1,11 +1,11 @@
 import { prop, reactive } from "@vicimpa/decorators";
 import { observe, Observer } from "./Observer";
 import { Game } from "./Game";
-import { useEffect, useMemo } from "preact/hooks";
+import { useEffect, useMemo } from "react";
 import { config } from "&data/config";
 import { signalPackedStore } from "&utils/signals";
 import { t } from "@vicimpa/data-pack";
-import { effect } from "@preact/signals";
+import { effect } from "@preact/signals-react";
 
 const hiscore = signalPackedStore('hiscore', t.uint(), 0);
 

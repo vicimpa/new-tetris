@@ -3,7 +3,7 @@ import { Stats } from "&core/Stats";
 import { sound } from "&sound";
 import { dispose } from "&utils/function";
 import { clamp } from "&utils/math";
-import { useEffect } from "preact/hooks";
+import { useEffect } from "react";
 
 export function useSounds(game: Game, stats: Stats) {
   useEffect(() => (
@@ -16,7 +16,7 @@ export function useSounds(game: Game, stats: Stats) {
           moved && sound('move');
         },
         rotate(has) {
-          sound(has ? 'rotate' : 'norotate');
+          has && sound('rotate');
         },
         loose() {
           sound('loose');

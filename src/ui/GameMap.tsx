@@ -11,7 +11,7 @@ export type GameMapProps = {
 
 export const GameMap = ({ game, size = 25, showY = 20 }: GameMapProps) => {
   return (
-    <div class="map" style={{ width: game.width * size, height: showY * size }}>
+    <div className="map" style={{ width: game.width * size, height: showY * size }}>
       <Canvas
         width={game.width * size}
         height={game.height * size}
@@ -36,7 +36,12 @@ export const GameMap = ({ game, size = 25, showY = 20 }: GameMapProps) => {
           // Draw helper
           game.now?.each((v, x, y) => {
             if (!v) return;
-            ctx.drawBlock(x + game.x, y + game.lastY, size, '#fff', .4);
+            ctx.filter = 'drop-shadow(0 0 10px #fff)';
+            ctx.drawGrid(x + game.x, y + game.lastY, size, '#ffffff', 1);
+            ctx.filter = 'none';
+            // ctx.drawGrid(x + game.x, y + game.lastY, size, colors[v - 1] ?? '#fff', 1, 4);
+            // ctx.drawGrid(x + game.x, y + game.lastY, size, '#6e6c6c', 1, 4);
+            // ctx.drawBlock(x + game.x, y + game.lastY, size, '#fff', .4);
           });
 
           // Draw now
@@ -46,7 +51,7 @@ export const GameMap = ({ game, size = 25, showY = 20 }: GameMapProps) => {
           });
         }}
       />
-      <Particles size={size} game={game} showY={showY} />
+      <Particles padding={1000} size={size} game={game} showY={showY} />
     </div>
   );
 };

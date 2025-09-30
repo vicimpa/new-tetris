@@ -1,7 +1,4 @@
 export const config = {
-  delay: {
-    drop: 150
-  },
   score: {
     move: 1,
     dash: 2,

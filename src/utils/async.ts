@@ -11,6 +11,10 @@ export function nextTick(fn: EmptyFunction) {
   };
 }
 
+export function nextTimeout(fn: EmptyFunction, n?: number) {
+  return clearTimeout.bind(null, setTimeout(fn, n));
+}
+
 export function delay(n: number) {
   return new Promise(r => setTimeout(r, n));
 }

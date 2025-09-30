@@ -1,10 +1,9 @@
 import { Figure } from "&core/Figure";
-import { Render } from "&core/Render";
 import { colors } from "&data/colors";
 import { useSignalValue } from "&hooks/useSignalValue";
-import { useComputed } from "@preact/signals";
+import { useComputed } from "@preact/signals-react";
 import { Canvas } from "./Canvas";
-import { MaybeSignal, unsignal } from "&utils/signals";
+import { type MaybeSignal, unsignal } from "&utils/signals";
 
 export type FigureViewProps = {
   figure?: MaybeSignal<Figure | null | undefined>;
@@ -44,7 +43,7 @@ export const FigureView = ({ clip, size = 20, figure, opacity = 1, color }: Figu
     return canvas;
 
   return (
-    <div class="viewer" style={{ width: size * 4, height: size * 4 }}>
+    <div className="viewer" style={{ width: size * 4, height: size * 4 }}>
       {canvas}
     </div>
   );

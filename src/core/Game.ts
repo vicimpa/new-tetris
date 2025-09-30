@@ -6,10 +6,9 @@ import { Figure } from "./Figure";
 import { Matrix } from "./Matrix";
 import { range } from "&utils/range";
 import { clone } from "&utils/clone";
-import { keyPress, keysAxis } from "&utils/keyboard";
-import { batch } from "@preact/signals";
+import { batch } from "@preact/signals-react";
 import { observe, Observer } from "./Observer";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "react";
 import { useLooper } from "&hooks/useLooper";
 
 const VALIDATE_DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]] as const;
@@ -31,6 +30,7 @@ export class Game extends Observer {
   @prop isStop = false;
   @prop time = 0;
   @prop waitTime = 0;
+  @prop dropDelay = 1000;
 
   @prop x = 0;
   @prop y = 0;
@@ -195,22 +195,14 @@ export class Game extends Observer {
   @observe
   update(delta: number) {
     batch(() => {
-      if (this.isEnd) return;
-
-      if (keyPress('Escape')) this.pause();
-      if (this.isStop || !this.now)
+      if (this.isEnd || this.isStop || !this.now)
         return void (this.waitTime = 0);
 
       this.time += delta;
       this.waitTime += delta;
 
-      if (keyPress(['Space', 'KeyX'])) this.dash();
-      if (keyPress(['Enter', 'KeyC'])) this.hold();
-      if (keyPress(['KeyW', 'ArrowUp'])) this.rotate();
-      if (keyPress(['ArrowLeft', 'ArrowRight', 'KeyA', 'KeyD'], 20, 6))
-        this.move(keysAxis(['KeyA', 'ArrowLeft'], ['KeyD', 'ArrowRight']), 0);
-      if (keyPress(['KeyS', 'ArrowDown'], 20, 6)) this.move(0, -1);
-      if (this.waitTime > 700) this.tick();
+      if (this.waitTime > this.dropDelay)
+        this.tick();
     });
   }
 

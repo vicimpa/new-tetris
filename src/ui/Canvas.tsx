@@ -1,9 +1,14 @@
 import { Render } from "&core/Render";
 import { dispose } from "&utils/function";
 import { looper } from "&utils/looper";
-import { effect, useComputed } from "@preact/signals";
-import { useSignalRef } from "@preact/signals/utils";
-import { JSX, useEffect } from "preact/compat";
+import { effect, useComputed } from "@preact/signals-react";
+import { useSignalRef } from "@preact/signals-react/utils";
+import { type JSX, useEffect } from "react";
+import styled from "styled-components";
+
+const StyledCanvas = styled.canvas`
+  pointer-events: none;
+`;
 
 export type CanvasProps = {
   draw?: (ctx: Render) => void | (() => void);
@@ -17,6 +22,7 @@ export const Canvas = ({ draw, loop, ...props }: CanvasProps) => {
   useEffect(() => (
     effect(() => {
       const { value: ctx } = ctxRef;
+
       if (!ctx)
         return;
 
@@ -30,6 +36,6 @@ export const Canvas = ({ draw, loop, ...props }: CanvasProps) => {
   ));
 
   return (
-    <canvas ref={canRef} {...props} />
+    <StyledCanvas ref={canRef} {...props} />
   );
 };

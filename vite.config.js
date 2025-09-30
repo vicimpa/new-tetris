@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import swc from "rollup-plugin-swc3";
+import react from "@vitejs/plugin-react-swc";
 import paths from "vite-tsconfig-paths";
 
 export default defineConfig({
@@ -16,7 +16,7 @@ export default defineConfig({
 	},
 	plugins: [
 		paths({ root: '..' }),
-		swc(),
+		react({ tsDecorators: true, plugins: [] })
 	],
 	esbuild: false,
 });

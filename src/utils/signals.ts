@@ -1,6 +1,6 @@
-import { signal, Signal } from "@preact/signals";
-import { makeDataPack, TypeValue } from "@vicimpa/data-pack";
-import { RefObject } from "preact";
+import { signal, Signal } from "@preact/signals-react";
+import { makeDataPack, type TypeValue } from "@vicimpa/data-pack";
+import { type RefObject } from "react";
 import base64 from "&utils/base64";
 
 export type MaybeSignal<T> = T | Signal<T>;

@@ -1,7 +1,6 @@
-import "preact/debug";
-
-import { render } from "preact";
+import { createRoot } from "react-dom/client";
 import { App } from "./app";
 import { find } from "&utils/dom";
 
-render(<App />, find('#app'));
+createRoot(find('#app'))
+  .render(<App />);

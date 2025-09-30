@@ -1,8 +1,8 @@
 import { Game } from "&core/Game";
 import { Stats } from "&core/Stats";
 import { clamp } from "&utils/math";
-import { computed, useComputed, useSignal } from "@preact/signals";
-import { useEffect } from "preact/hooks";
+import { computed, useComputed, useSignal } from "@preact/signals-react";
+import { useEffect } from "react";
 
 export type BigStatsProps = {
   stats: Stats;
@@ -24,11 +24,11 @@ const BigStats = ({ stats }: BigStatsProps) => {
   ));
 
   return (
-    <div class="big">
-      <p key={computed(() => count.value)} class="drop">{dropName}</p>
+    <div className="big">
+      <p className="drop">{dropName}</p>
       {computed(() => (
         <p
-          class="combo"
+          className="combo"
           style={(
             combo.value > 0 ? {
               opacity: 1,
@@ -93,12 +93,12 @@ export type StatsProps = {
 };
 
 export const StatsView = ({ game, stats }: StatsProps) => (
-  <div class="stats">
+  <div className="stats">
     <BigStats stats={stats} />
-    <p class="hiscore">Hiscore<br /><b>{computed(() => numeric(stats.hiscore))}</b></p>
-    <p class="score">Score<br /><b>{computed(() => numeric(stats.score))}</b></p>
-    <p class="time">Time<br /><b>{computed(() => time(game.time))}</b></p>
-    <p class="lines">Lines<br /><b>{computed(() => numeric(stats.lines))}</b></p>
-    <p class="fixed">Fixes<br /><b>{computed(() => numeric(stats.fixed))}</b></p>
+    <p className="hiscore">Hiscore<br /><b>{computed(() => numeric(stats.hiscore))}</b></p>
+    <p className="score">Score<br /><b>{computed(() => numeric(stats.score))}</b></p>
+    <p className="time">Time<br /><b>{computed(() => time(game.time))}</b></p>
+    <p className="lines">Lines<br /><b>{computed(() => numeric(stats.lines))}</b></p>
+    <p className="fixed">Fixes<br /><b>{computed(() => numeric(stats.fixed))}</b></p>
   </div>
 );

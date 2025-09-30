@@ -1,7 +1,7 @@
-import { useSignal } from "@preact/signals";
+import { useSignal } from "@preact/signals-react";
 import { PopupView } from "./Popup";
-import { Show } from "@preact/signals/utils";
-import { PropsWithChildren } from "preact/compat";
+import { Show } from "@preact/signals-react/utils";
+import { type PropsWithChildren } from "react";
 
 export type MenuProps = {
   title: string;
@@ -14,7 +14,7 @@ export const Menu = ({ title, children }: MenuProps) => {
       <button onClick={() => show.value = true}>{title}</button>
       <Show when={show}>
         <PopupView>
-          <div class="modal">
+          <div className="modal">
             <h4>{title}</h4>
             <hr />
             {children}

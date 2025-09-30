@@ -1,126 +1,86 @@
 import { Game } from "&core/Game";
-import { useEffect, useMemo, useRef } from "preact/hooks";
+import { useEffect } from "react";
 import { Canvas } from "./Canvas";
-import { Render } from "&core/Render";
-import { range } from "&utils/range";
 import { colors } from "&data/colors";
 import { Figure } from "&core/Figure";
+import { useParticleSystem } from "&hooks/useParticleSystem";
+import { rand } from "&utils/math";
+import { vec2 } from "@vicimpa/glm";
 
 export type ParticlesProps = {
   size: number;
   game: Game;
   showY: number;
+  padding?: number;
 };
 
-class Point {
-  constructor(readonly data: Set<Point>) {
-    this.data.add(this);
-  }
+export const Particles = ({ size, game, showY, padding = 0 }: ParticlesProps) => {
+  const figure = useParticleSystem(
+    (figure: Figure, x: number, y: number, ey: number) => {
+      let blockSize = 2;
+      let time = rand(300, 600), start = time;
+      let { width, left } = figure.rect();
+      let pos = vec2(x + rand(width + left), y + rand(ey - y)).scale(size).sub(blockSize / 2);
+      let move = vec2(rand(-100, 100), rand(100, 600));
 
-  x = 0;
-  y = 0;
-
-  moveX = 0;
-  moveY = 0;
-
-  factorX = 0;
-  factorY = 0;
-  gravity = 0;
-
-  time = 0;
-  totalTime = 0;
-  size = 1;
-
-  color = '#fff';
-
-  update(delta: number) {
-    this.time += delta;
-    if (this.time > this.totalTime) {
-      this.data.delete(this);
-      return;
+      return (ctx, dt) => {
+        if ((time -= dt) < 0) return false;
+        move.scale(.99);
+        pos.scaleAdd(move, .001 * dt);
+        ctx.globalAlpha = time / start / 2;
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(pos.x, pos.y, blockSize, blockSize);
+      };
     }
+  );
 
-    this.moveX *= this.factorX;
-    this.moveY *= this.factorY;
-    this.moveY -= delta * this.gravity;
+  const line = useParticleSystem(
+    (x: number, y: number, color: string) => {
+      let blockSize = 8;
+      let time = rand(500, 1000), start = time;
+      let pos = vec2(x + rand(1), y + rand(1)).scale(size).sub(blockSize / 2);
+      let move = vec2(rand(-500, 500), rand(2000));
 
-    this.x += this.moveX * delta * .001;
-    this.y += this.moveY * delta * .001;
-  }
-
-  render(ctx: Render) {
-    ctx.fillStyle = this.color;
-    ctx.globalAlpha = 1 - (this.time / this.totalTime);
-    ctx.fillRect(this.x - this.size / 2, this.y - this.size / 2, this.size, this.size);
-  }
-
-  static dropRow(items: Set<Point>, size: number, y: number, row: number[]) {
-    row.forEach((v, x) => {
-      for (const _ of range(Math.random() * 100 + 100)) {
-        const point = new Point(items);
-        point.x = Math.random() * size + x * size;
-        point.y = Math.random() * size + y * size;
-        point.moveX = (Math.random() * 2 - 1) * 1000;
-        point.moveY = (Math.random() * 2) * 1000;
-        point.factorX = .94;
-        point.factorY = .96;
-        point.gravity = 3;
-        point.size = 6;
-        point.totalTime = (Math.random() * 300 + 100);
-        point.color = colors[v - 1] ?? '#fff';
-      }
-    });
-  }
-
-  static dropFigure(items: Set<Point>, size: number, dX: number, sY: number, eY: number, figure: Figure) {
-    figure.each((v, x, y) => {
-      if (!v) return;
-      for (const dY of range(sY, eY)) {
-        for (const _ of range(5)) {
-          const point = new Point(items);
-          point.x = Math.random() * size + (x + dX) * size;
-          point.y = Math.random() * size + (y + dY) * size;
-          point.moveX = (Math.random() * 2 - 1) * 50;
-          point.moveY = (Math.random() * -2) * 100;
-          point.factorX = .94;
-          point.factorY = .96;
-          // point.gravity = 10;
-          point.size = 3;
-          point.totalTime = (Math.random() * 200 + 200);
-          point.color = colors[v - 1] ?? '#fff';
-        }
-      }
-    });
-  }
-}
-
-export const Particles = ({ size, game, showY }: ParticlesProps) => {
-  const items = useMemo(() => new Set<Point>(), []);
+      return (ctx, dt) => {
+        if ((time -= dt) < 0) return false;
+        move.scale(.99);
+        move.y -= 3 * dt;
+        pos.scaleAdd(move, .001 * dt);
+        ctx.globalAlpha = time / start;
+        ctx.fillStyle = color;
+        ctx.fillRect(pos.x, pos.y, blockSize, blockSize);
+      };
+    }
+  );
 
   useEffect(() => (
     game.subscribeMany({
       dropLines(lines) {
         lines.forEach((row, y) => {
-          Point.dropRow(items, size, y, row);
+          row.forEach((val, x) => {
+            line.spawn(rand(size), x, y, colors[val - 1] ?? '#fff');
+          });
         });
       },
       dash([fig, x, y]) {
-        fig && Point.dropFigure(items, size, x, this.lastY, y, fig);
+        if (!fig) return;
+        const count = rand(1, 5) * fig.size * 10;
+        figure.spawn(count, fig, x, y, game.lastY);
       },
     })
   ));
 
   return (
     <Canvas
-      width={game.map.width * size}
-      height={showY * size}
-      class="particles"
+      style={{ left: -padding, bottom: -padding }}
+      width={game.map.width * size + padding * 2}
+      height={showY * size + padding * 2}
       loop={(ctx, delta) => {
         ctx.resetTransform();
         ctx.clearRect(0, 0, ctx.width, ctx.height);
-        ctx.transform(1, 0, 0, -1, 0, ctx.height);
-        items.forEach(p => p.update(delta));
-        items.forEach(p => p.render(ctx));
+        ctx.transform(1, 0, 0, -1, padding, ctx.height - padding);
+        figure.render(ctx, delta);
+        line.render(ctx, delta);
       }}
     />
   );

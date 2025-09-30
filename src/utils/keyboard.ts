@@ -1,15 +1,15 @@
-import { nextTick } from "./async";
+import { nextTick, nextTimeout } from "./async";
 
 const DOWN = new Set<string>();
 const PRESS = new Set<string>();
-const TIMEOUT = new Map<string, number>();
+const TIMEOUT = new Map<string, () => void>();
 const PEEK = new Set<(r: string) => void>();
 const COUNT = new Map<string, number>();
 
 addEventListener('keydown', ({ code, repeat }) => {
   if (repeat) return;
   if (PEEK.size) {
-    [...PEEK].forEach(e => e(code));
+    PEEK.forEach(e => e(code));
     PEEK.clear();
     return;
   }
@@ -30,7 +30,9 @@ export function keyPeek() {
   return new Promise<string>((r) => PEEK.add(r));
 }
 
-export function keyDown(code: string | string[]) {
+export function keyDown(code?: string | string[]) {
+  if (!code) return false;
+
   if (Array.isArray(code))
     return code.findIndex(keyDown) !== -1;
 
@@ -41,18 +43,26 @@ export function keysDownAll(codes: string[]) {
   return codes.every(keyDown);
 }
 
-export function keyPress(code: string | string[], every?: number, skip = 0) {
+export type KeyPressOptions = {
+  every?: number;
+  skip?: number;
+};
+
+export function keyPress(code: string | string[], { every, skip = 0 }: KeyPressOptions = {}) {
   const key = String(code);
   const count = COUNT.get(key) ?? 0;
   if (keyDown(code)) {
     if (!PRESS.has(key)) {
       nextTick(() => {
         PRESS.add(key);
-        clearTimeout(TIMEOUT.get(key));
-        if (every !== undefined)
-          TIMEOUT.set(key, setTimeout(() => {
-            PRESS.delete(key);
-          }, every));
+        TIMEOUT.get(key)?.();
+        if (every !== undefined) {
+          TIMEOUT.set(key, (
+            nextTimeout(() => {
+              PRESS.delete(key);
+            }, every)
+          ));
+        }
       });
 
       COUNT.set(key, count + 1);
@@ -66,14 +76,22 @@ export function keyPress(code: string | string[], every?: number, skip = 0) {
   return false;
 }
 
-export function keyPressAll(codes: string[], every?: number, skip?: number) {
-  return codes.every(e => keyPress(e, every, skip));
+export function keyPressAll(codes: string[], options?: KeyPressOptions) {
+  return codes.every(e => keyPress(e, options));
 }
 
-export function keysAxis(neg: string | string[], pos: string | string[]) {
+function keysAxis(pos: string | string[]): number;
+function keysAxis(neg: string | string[], pos?: string | string[]): number;
+function keysAxis(neg: string | string[], pos?: string | string[]): number {
+  if (!pos) return +keyDown(neg);
   return -keyDown(neg) + +keyDown(pos);
 }
 
-export function keysAxisAll(neg: string[], pos: string[]) {
+function keysAxisAll(pos: string[]): number;
+function keysAxisAll(neg: string[], pos: string[]): number;
+function keysAxisAll(neg: string[], pos?: string[]): number {
+  if (!pos) return +keysDownAll(neg);
   return -keysDownAll(neg) + +keysDownAll(pos);
 }
+
+export { keysAxis, keysAxisAll };

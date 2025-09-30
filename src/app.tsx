@@ -4,68 +4,44 @@ import { useShaker } from "&hooks/useShaker";
 import { useSounds } from "&hooks/useSounds";
 import { FigureView } from "&ui/FigureView";
 import { GameMap } from "&ui/GameMap";
-import { PopupProvider, PopupView } from "&ui/Popup";
+import { PopupProvider } from "&ui/Popup";
 import { StatsView } from "&ui/StatsView";
 import { array } from "&utils/array";
-import { computed } from "@preact/signals";
-import { Show } from "@preact/signals/utils";
+import { computed } from "@preact/signals-react";
 import { real } from "@vicimpa/decorators";
-import { useEffect } from "preact/hooks";
-import { Settings } from "&ui/Settings";
 import { Helps } from "&ui/Helps";
+import { useController } from "&core/Controller";
+import { Pause } from "&ui/Pause";
 
 export const App = () => {
   const game = useGame();
   const stats = useStats(game);
   const ref = useShaker(game);
+  const ctrl = useController(game);
 
   useSounds(game, stats);
-  useEffect(() => { game.pause(); }, []);
 
   return (
-    <div class="game" ref={ref}>
+    <div className="game" ref={ref}>
       <PopupProvider>
-        <div class="side left">
+        <div className="side left">
           <p>Hold</p>
           <FigureView
             figure={real(game, 'holded')}
             opacity={computed(() => game.canHold ? 1 : .1)}
             color={computed(() => game.canHold ? undefined : '#fff')} />
         </div>
-        <div class="content">
+        <div className="content">
           <GameMap size={25} game={game} />
           <StatsView game={game} stats={stats} />
           <Helps />
-          <Show when={computed(() => game.isEnd || game.isStop)}>
-            <PopupView>
-              <div class="modal">
-                <h4>{computed(() => game.isEnd ? 'Game over' : 'Pause (Esc)')}</h4>
-                <hr />
-                <button onClick={() => game.restart()}>
-                  Restart
-                </button>
-                <button onClick={() => game.restart(true)}>Next seed</button>
-                <br />
-                <Settings />
-                <br />
-                <Show when={real(game, 'isStop')}>
-                  <button onClick={() => game.pause()}>
-                    {computed(() => game.time ? 'Resume' : 'Play')}
-                  </button>
-                </Show>
-                <br />
-                <a target="_blank" class="github" href="https://github.com/vicimpa/new-tetris">
-                  <i class="i-github" /> GitHub
-                </a>
-              </div>
-            </PopupView>
-          </Show>
+          <Pause game={game} />
         </div>
-        <div class="side right">
+        <div className="side right">
           <p>Next</p>
-          <div class="stack">
+          <div className="stack">
             {array(game.queue.size, (i) => (
-              <FigureView clip figure={computed(() => game.queue.get(i))} />
+              <FigureView key={i} clip figure={computed(() => game.queue.get(i))} />
             ))}
           </div>
         </div>

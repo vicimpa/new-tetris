@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useId, useRef } from "preact/compat";
+import { type PropsWithChildren, useEffect, useRef } from "react";
 
 export type OutsideProps = {
   onMouseDown?: (e: MouseEvent) => any;

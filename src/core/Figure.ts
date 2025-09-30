@@ -1,4 +1,3 @@
-import { clone } from "&utils/clone";
 import { mod } from "&utils/math";
 import { range } from "&utils/range";
 import { Matrix } from "./Matrix";

@@ -1,15 +1,15 @@
-import { Signal, useSignal } from "@preact/signals";
-import { useSignalRef } from "@preact/signals/utils";
-import { VNode } from "preact";
-import { createContext, createPortal, JSX, PropsWithChildren, useContext, useEffect, useId, useMemo, useRef } from "preact/compat";
+import { Signal, useSignal } from "@preact/signals-react";
+import { useSignalRef } from "@preact/signals-react/utils";
+import { createContext, type JSX, type PropsWithChildren, useContext, useEffect, useId, useMemo, useRef, type FC, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { Outside } from "./Outside";
 
 const PopupContext = createContext<Signal<HTMLDivElement | null> | null>(null);
-const PopupShowerContext = createContext<Signal<VNode[]> | null>(null);
+const PopupShowerContext = createContext<Signal<ReactNode[]> | null>(null);
 
 export const PopupProvider = ({ children }: PropsWithChildren) => {
   const ref = useSignalRef<HTMLDivElement | null>(null);
-  const shower = useSignal<VNode[]>([]);
+  const shower = useSignal<ReactNode[]>([]);
 
   return (
     <>
@@ -19,40 +19,38 @@ export const PopupProvider = ({ children }: PropsWithChildren) => {
         </PopupShowerContext.Provider>
         {shower}
       </PopupContext.Provider>
-      <div ref={ref} class="popup-container" />
+      <div ref={ref} className="popup-container" />
     </>
   );
 };
 
-export type PopupViewProps = Omit<JSX.IntrinsicElements['div'], 'ref' | 'className'> & {
+export type PopupViewProps = JSX.IntrinsicElements['div'] & {
   onOutsideClick?: (e: MouseEvent) => any;
   onOutsideMouseDown?: (e: MouseEvent) => any;
   onOutsideMouseUp?: (e: MouseEvent) => any;
 };
 
-export const PopupView = ({
-  class: className,
+export const PopupView: FC<PopupViewProps> = ({
+  className,
   children,
   onOutsideClick,
   onOutsideMouseDown,
   onOutsideMouseUp,
   ...props
-}: PopupViewProps) => {
+}) => {
   const ctx = useContext(PopupContext);
   const value = ctx?.value;
   if (!value) return;
 
   return createPortal(
-    <div class={className + ' popup'} {...props}>
-      <div>
-        <Outside
-          onClick={onOutsideClick}
-          onMouseDown={onOutsideMouseDown}
-          onMouseUp={onOutsideMouseUp}
-        >
-          {children}
-        </Outside>
-      </div>
+    <div className={className + ' popup'} {...props}>
+      <Outside
+        onClick={onOutsideClick}
+        onMouseDown={onOutsideMouseDown}
+        onMouseUp={onOutsideMouseUp}
+      >
+        {children}
+      </Outside>
     </div>,
     value
   );
@@ -73,7 +71,7 @@ export function usePopup() {
   }, []);
 
   return {
-    show(children: VNode, props: Omit<PopupViewProps, 'key' | 'children'> = {}) {
+    show(children: ReactNode, props: Omit<PopupViewProps, 'key' | 'children'> = {}) {
       let active = true;
       const key = id + '-' + counter.current++;
 
@@ -81,7 +79,7 @@ export function usePopup() {
         if (!active) return;
         active = false;
         disposes.delete(close);
-        shower.value = shower.peek().filter(e => e.key !== node.key);
+        shower.value = shower.peek().filter(e => e !== node);
       };
 
       const node = (

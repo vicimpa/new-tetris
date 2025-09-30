@@ -1,5 +1,5 @@
 import { array } from "&utils/array";
-import { signal } from "@preact/signals";
+import { signal } from "@preact/signals-react";
 
 export class Queue<T> {
   readonly raw: T[];

@@ -294,7 +294,3 @@ button {
 button:not(:disabled) {
   cursor: pointer;
 }
-
-.particles {
-  position: absolute;
-}

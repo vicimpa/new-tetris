@@ -1,5 +1,5 @@
 import { nextTick } from "&utils/async";
-import { BaseFunction, dispose } from "&utils/function";
+import { type BaseFunction, dispose } from "&utils/function";
 
 type MethodKeys<T extends object> = {
   [K in keyof T]: T[K] extends BaseFunction ? K : never
@@ -25,7 +25,7 @@ export class Observer {
     )) as Set<Listener<this[K], this>>;
 
     subs.add(listener);
-    return () => subs.delete(listener);
+    return () => { subs.delete(listener); };
   }
 
   subscribeMany(listeners: Listeners<this>) {

@@ -2,7 +2,7 @@ import { Game } from "&core/Game";
 import { filter } from "&utils/filter";
 import { dispose } from "&utils/function";
 import { useLooper } from "./useLooper";
-import { useEffect, useMemo, useRef } from "preact/hooks";
+import { useEffect, useMemo, useRef } from "react";
 
 type ShackerRef = (<T extends HTMLElement>(current: T | null) => any) & {
   pushX(x: number): void;

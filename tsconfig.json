@@ -1,20 +1,27 @@
 {
 	"compilerOptions": {
+		"tsBuildInfoFile": null,
 		"target": "esnext",
-		"module": "esnext",
-		"moduleResolution": "bundler",
-		"noEmit": true,
-		"allowJs": true,
-		"checkJs": true,
-		"jsx": "react-jsxdev",
-		"jsxImportSource": "preact",
-		"skipLibCheck": true,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"strict": true,
+		"useDefineForClassFields": true,
+		"lib": [
+			"esnext",
+			"DOM",
+			"DOM.Iterable"
+		],
+		"module": "ESNext",
 		"types": [
 			"vite/client"
 		],
+		"skipLibCheck": true,
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+		"jsx": "react-jsx",
+		"strict": true,
+		"experimentalDecorators": true,
+		"baseUrl": "./",
 		"paths": {
 			"&*": [
 				"./src/*"
@@ -23,10 +30,5 @@
 	},
 	"include": [
 		"./src"
-	],
-	"references": [
-		{
-			"path": "./tsconfig.node.json"
-		}
 	]
 }
