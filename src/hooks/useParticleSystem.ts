@@ -8,7 +8,7 @@ export function useParticleSystem<A extends any[]>(fn: (...args: A) => Particle)
   const items = useMemo(() => new Set<Particle>(), []);
   const maker = useEvent(fn);
 
-  return {
+  return useMemo(() => ({
     spawn(size: number, ...args: A) {
       while (size-- > 0)
         items.add(maker(...args));
@@ -19,7 +19,7 @@ export function useParticleSystem<A extends any[]>(fn: (...args: A) => Particle)
     render(ctx: Render, delta: number) {
       items.forEach(run => run(ctx, delta) && items.delete(run));
     }
-  };
+  }), [items]);
 }
 
 export function makeParticleSystem<M extends any[], A extends any[]>(fn: (...args: M) => (...args: A) => Particle) {

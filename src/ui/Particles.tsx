@@ -68,7 +68,7 @@ export const Particles = ({ size, game, showY, padding = 0 }: ParticlesProps) =>
         figure.spawn(count, fig, x, y, game.lastY);
       },
     })
-  ));
+  ), [game]);
 
   return (
     <Canvas
