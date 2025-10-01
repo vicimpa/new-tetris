@@ -1,11 +1,6 @@
 import { loadImage } from "&utils/image";
 import boxSrc from "&img/box.svg";
-
-const context = Symbol('context');
-
-type Canvas = HTMLCanvasElement & {
-  [context]?: CanvasRenderingContext2D | Render | null;
-};
+import { makeStore } from "&utils/store";
 
 const box = await loadImage(boxSrc, 32, 32, true);
 
@@ -30,15 +25,20 @@ export class Render extends CanvasRenderingContext2D {
     this.drawImage(box, x * size, y * size, size, size);
   }
 
-  static fromCanvas(can?: Canvas | null): Render | undefined {
-    let ctx: CanvasRenderingContext2D | null | undefined = null, proto = this.prototype;
-    return can?.[context] ?? (
-      ctx = can?.getContext('2d'),
-      can && (
-        can[context] = (
-          ctx && Object.setPrototypeOf(ctx, proto)
-        )
-      )
-    );
+  fromPath(fn: Function) {
+    this.beginPath();
+    fn();
+    this.closePath();
   }
+
+  fromFilter(filter: string, fn: Function) {
+    this.filter = filter;
+    fn();
+    this.filter = 'none';
+  }
+
+  static fromCanvas = makeStore((canvas: HTMLCanvasElement) => {
+    const ctx = canvas.getContext('2d');
+    return Object.setPrototypeOf(ctx, Render.prototype) as Render;
+  });
 }

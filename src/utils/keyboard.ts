@@ -30,9 +30,7 @@ export function keyPeek() {
   return new Promise<string>((r) => PEEK.add(r));
 }
 
-export function keyDown(code?: string | string[]) {
-  if (!code) return false;
-
+export function keyDown(code: string | string[]) {
   if (Array.isArray(code))
     return code.findIndex(keyDown) !== -1;
 

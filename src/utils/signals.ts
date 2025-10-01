@@ -2,6 +2,7 @@ import { signal, Signal } from "@preact/signals-react";
 import { makeDataPack, type TypeValue } from "@vicimpa/data-pack";
 import { type RefObject } from "react";
 import base64 from "&utils/base64";
+import gzip from "./gzip";
 
 export type MaybeSignal<T> = T | Signal<T>;
 
@@ -50,16 +51,21 @@ function signalPackedStore(name: string, schema: Schema, defaultValue?: any): an
   const pack = makeDataPack(schema);
   const data = signal(defaultValue ?? null);
 
-  try {
-    const str = localStorage.getItem(name) ?? '';
-    const buff = base64.toBuffer(str);
-    data.value = pack.read(buff);
-  } catch (e) { console.error(e); }
+  async function parse() {
+    try {
+      const str = localStorage.getItem(name) ?? '';
+      const buff = base64.toBuffer(str);
+      const decoded = await gzip.decode(buff);
+      data.value = pack.read(decoded);
+    } catch (e) { console.error(e); }
+  }
 
-  data.subscribe((value) => {
+  parse();
+  data.subscribe(async (value) => {
     try {
       const buff = pack.write(value);
-      const str = base64.fromBuffer(buff);
+      const encoded = await gzip.encode(buff);
+      const str = base64.fromBuffer(encoded);
       localStorage.setItem(name, str);
     } catch (e) { console.error(e); }
   });

@@ -18,9 +18,9 @@ export class Controller {
 
   @prop moveLeftKey: string | string[] = ['ArrowLeft', 'KeyA'];
   @prop moveRightKey: string | string[] = ['ArrowRight', 'KeyD'];
-  @prop softDropKey: string | string[] = ['KeyS', 'ArrowDown'];
+  @prop softDropKey: string | string[] = ['ArrowDown', 'KeyS'];
   @prop hardDropKey: string | string[] = ['Space', 'KeyX'];
-  @prop rotateKey: string | string[] = ['KeyW', 'ArrowUp'];
+  @prop rotateKey: string | string[] = ['ArrowUp', 'KeyW'];
   @prop holdKey: string | string[] = ['Enter', 'KeyC'];
 
   constructor(public game: Game) { }

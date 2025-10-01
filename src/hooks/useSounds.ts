@@ -26,6 +26,9 @@ export function useSounds(game: Game, stats: Stats) {
         },
         restart() {
           sound('pause');
+        },
+        setLastY(v) {
+          v && sound('last');
         }
       }),
       stats.subscribeMany({

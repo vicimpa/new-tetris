@@ -29,11 +29,19 @@ export class Game extends Observer {
   @prop isEnd = false;
   @prop isStop = false;
   @prop time = 0;
+  @prop isLastY = false;
   @prop waitTime = 0;
-  @prop dropDelay = 1000;
+  @prop tickDelay = 1000;
+  @prop fixDelay = 500;
 
   @prop x = 0;
   @prop y = 0;
+
+  @prop preview = {
+    now: null as Figure | null,
+    x: 0,
+    y: 0,
+  };
 
   @prop get lastY() {
     const { now, map, x, y } = this;
@@ -46,6 +54,12 @@ export class Game extends Observer {
     }
 
     return 20;
+  }
+
+  @observe
+  setLastY(isLast: boolean) {
+    this.waitTime = 0;
+    this.isLastY = isLast;
   }
 
   @observe
@@ -128,25 +142,40 @@ export class Game extends Observer {
   }
 
   @observe
-  fix() {
-    const { now, x, y, map } = this;
-    if (!now) return false;
-    map.setMatrix(x, y, now);
+  toMap(now: Figure, x: number, y: number) {
     this.now = null;
     this.canHold = true;
     this.waitTime = 0;
-    this.drop();
-    this.setNow();
+    this.map.setMatrix(x, y, now);
+  }
+
+  @observe
+  checkLose() {
     let lose = false;
     this.map.each((v, _x, y) => {
       if (y < 20) return;
       if (v) lose = true;
     });
-    if (lose) {
+    return lose;
+  }
+
+  @observe
+  tick() {
+    this.waitTime = 0;
+    this.y--;
+  }
+
+  @observe
+  fix() {
+    const { now, x, y } = this;
+    if (!now) return false;
+    this.toMap(now, x, y);
+    this.drop();
+    if (this.checkLose()) {
       this.loose();
-      this.now = null;
+    } else {
+      this.setNow();
     }
-    return !lose;
   }
 
   @observe
@@ -186,13 +215,6 @@ export class Game extends Observer {
   }
 
   @observe
-  tick() {
-    this.waitTime = 0;
-    if (this.lastY === this.y) this.fix();
-    else this.y--;
-  }
-
-  @observe
   update(delta: number) {
     batch(() => {
       if (this.isEnd || this.isStop || !this.now)
@@ -201,8 +223,17 @@ export class Game extends Observer {
       this.time += delta;
       this.waitTime += delta;
 
-      if (this.waitTime > this.dropDelay)
+      if (!this.isLastY && this.waitTime > this.tickDelay)
         this.tick();
+
+      if (this.isLastY && this.waitTime > this.fixDelay)
+        this.fix();
+
+      if (!this.isLastY && this.y === this.lastY)
+        this.setLastY(true);
+
+      if (this.isLastY && this.y !== this.lastY)
+        this.setLastY(false);
     });
   }
 

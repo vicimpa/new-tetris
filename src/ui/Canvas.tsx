@@ -17,7 +17,7 @@ export type CanvasProps = {
 
 export const Canvas = ({ draw, loop, ...props }: CanvasProps) => {
   const canRef = useSignalRef<HTMLCanvasElement | null>(null);
-  const ctxRef = useComputed(() => Render.fromCanvas(canRef.value) ?? null);
+  const ctxRef = useComputed(() => canRef.value && Render.fromCanvas(canRef.value));
 
   useEffect(() => (
     effect(() => {

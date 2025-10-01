@@ -34,7 +34,7 @@ export const App = () => {
         <div className="content">
           <GameMap size={25} game={game} />
           <StatsView game={game} stats={stats} />
-          <Helps />
+          <Helps ctrl={ctrl} />
           <Pause game={game} />
         </div>
         <div className="side right">

@@ -1,8 +1,9 @@
 import { Game } from "&core/Game";
 import { Stats } from "&core/Stats";
+import { useLooper } from "&hooks/useLooper";
 import { clamp } from "&utils/math";
 import { computed, useComputed, useSignal } from "@preact/signals-react";
-import { useEffect } from "react";
+import { useEffect, useRef, type FC, type ReactNode } from "react";
 
 export type BigStatsProps = {
   stats: Stats;
@@ -92,13 +93,26 @@ export type StatsProps = {
   stats: Stats;
 };
 
+const Value: FC<{ calc: () => any; }> = ({ calc }) => {
+  const value = useComputed(() => String(calc()));
+  const ref = useRef<HTMLElement>(null);
+  useLooper(() => {
+    if (!ref.current)
+      return;
+
+    if (ref.current.innerText !== value.value)
+      ref.current.innerText = value.value;
+  });
+  return <b ref={ref} />;
+};
+
 export const StatsView = ({ game, stats }: StatsProps) => (
   <div className="stats">
     <BigStats stats={stats} />
-    <p className="hiscore">Hiscore<br /><b>{computed(() => numeric(stats.hiscore))}</b></p>
-    <p className="score">Score<br /><b>{computed(() => numeric(stats.score))}</b></p>
+    <p className="hiscore">Hiscore<br /><Value calc={() => numeric(stats.hiscore)} /></p>
+    <p className="score">Score<br /><Value calc={() => numeric(stats.score)} /></p>
     <p className="time">Time<br /><b>{computed(() => time(game.time))}</b></p>
-    <p className="lines">Lines<br /><b>{computed(() => numeric(stats.lines))}</b></p>
-    <p className="fixed">Fixes<br /><b>{computed(() => numeric(stats.fixed))}</b></p>
+    <p className="lines">Lines<br /><Value calc={() => numeric(stats.lines)} /></p>
+    <p className="fixed">Fixes<br /><Value calc={() => numeric(stats.fixed)} /></p>
   </div>
 );
