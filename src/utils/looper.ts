@@ -1,5 +1,7 @@
 export type FrameLoop = (delta: number, time: number) => any;
 
+const { requestAnimationFrame, cancelAnimationFrame } = window;
+
 export function looper(fn: FrameLoop) {
   var time = performance.now(), raf: number;
   _fn();
