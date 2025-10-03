@@ -64,6 +64,7 @@ export class Game extends Observer {
 
   @observe
   setNow(newNow: Figure = this.queue.shift()) {
+    this.waitTime = 0;
     this.x = Math.floor(this.width / 2 - newNow.size / 2);
     for (const dY of range(20, 40)) {
       if (!newNow.collide(this.x, dY, this.map)) {
