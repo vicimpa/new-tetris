@@ -75,7 +75,7 @@ export function keyPress(code: string | string[], { every, skip = 0 }: KeyPressO
 }
 
 export function keyPressAll(codes: string[], options?: KeyPressOptions) {
-  return codes.every(e => keyPress(e, options));
+  return keysDownAll(codes) && keyPress(codes, options);
 }
 
 function keysAxis(pos: string | string[]): number;

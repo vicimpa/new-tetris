@@ -5,14 +5,12 @@ type MethodKeys<T extends object> = {
 }[keyof T];
 
 type Listener<T, O> = T extends (...args: infer A) => infer R ? (
-  (this: O, ...args: [...A, Value<R>]) => any
+  (this: O, ...args: [...A, Awaited<R>]) => any
 ) : () => any;
 
 type Listeners<T extends object> = {
   [K in MethodKeys<T>]?: Listener<T[K], T>
 };
-
-type Value<T> = T extends PromiseLike<infer R> ? Value<R> : T;
 
 export class Observer {
   subscribe<K extends MethodKeys<this>>(event: K, listener: Listener<this[K], this>) {

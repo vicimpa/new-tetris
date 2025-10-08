@@ -13,15 +13,14 @@
 		"rollup-plugin-swc3": "^0.12.1",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7",
+		"@types/node": "^24.6.0",
 		"vite-tsconfig-paths": "^5.1.4"
 	},
 	"dependencies": {
 		"@preact/signals-react": "^3.3.0",
-		"@types/node": "^24.6.0",
 		"@vicimpa/data-pack": "^0.0.11",
 		"@vicimpa/decorators": "^0.0.12",
 		"@vicimpa/glm": "^0.1.8",
-		"@vicimpa/math": "^0.0.10",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"styled-components": "^6.1.19"

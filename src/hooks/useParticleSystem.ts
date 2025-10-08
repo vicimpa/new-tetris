@@ -17,7 +17,7 @@ export function useParticleSystem<A extends any[]>(fn: (...args: A) => Particle)
       items.clear();
     },
     render(ctx: Render, delta: number) {
-      items.forEach(run => run(ctx, delta) && items.delete(run));
+      items.forEach(run => (run(ctx, delta) === false) && items.delete(run));
     }
   }), [items]);
 }

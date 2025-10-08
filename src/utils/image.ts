@@ -1,3 +1,6 @@
+const can = document.createElement('canvas');
+const ctx = can.getContext('2d')!;
+
 export async function loadImage(src: string, width?: number, height?: number, flipY?: boolean) {
   const image = new Image(width, height);
 
@@ -9,8 +12,6 @@ export async function loadImage(src: string, width?: number, height?: number, fl
     if (flipY) {
       const { onload } = image;
       image.onload = () => {
-        const can = document.createElement('canvas');
-        const ctx = can.getContext('2d')!;
         can.width = image.width;
         can.height = image.height;
         ctx.transform(1, 0, 0, -1, 0, image.height);
