@@ -7,22 +7,22 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
-		"@types/react": "^19.1.16",
-		"@types/react-dom": "^19.1.9",
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.1",
 		"@vitejs/plugin-react-swc": "^4.1.0",
 		"rollup-plugin-swc3": "^0.12.1",
-		"typescript": "^5.9.2",
-		"vite": "^7.1.7",
-		"@types/node": "^24.6.0",
+		"typescript": "^5.9.3",
+		"vite": "^7.1.9",
+		"@types/node": "^24.7.0",
 		"vite-tsconfig-paths": "^5.1.4"
 	},
 	"dependencies": {
-		"@preact/signals-react": "^3.3.0",
-		"@vicimpa/data-pack": "^0.0.11",
-		"@vicimpa/decorators": "^0.0.12",
-		"@vicimpa/glm": "^0.1.8",
-		"react": "^19.1.1",
-		"react-dom": "^19.1.1",
+		"@preact/signals-react": "^3.3.1",
+		"@vicimpa/data-pack": "^0.0.13",
+		"@vicimpa/decorators": "^0.0.15",
+		"@vicimpa/glm": "^0.1.10",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
 		"styled-components": "^6.1.19"
 	}
 }
