@@ -164,49 +164,6 @@ body {
   align-items: center;
 }
 
-.tabs {
-  display: flex;
-  flex-direction: column;
-  border: 2px solid #999;
-  background-color: #222;
-}
-
-.tabs .head,
-.tabs .body {
-  display: flex;
-}
-
-.tabs .head {
-  border-bottom: 2px solid #999;
-}
-
-.tabs .head .item {
-  padding: 5px 10px;
-
-  &.selected {
-    background-color: #555;
-    box-shadow: inset -3px -3px 1px #000, inset 3px -3px 1px #000;
-  }
-
-  &:not(&.selected) {
-    cursor: pointer;
-  }
-
-  border-right: 1px solid #999;
-}
-
-.tabs .body {
-  padding: 10px;
-  flex-direction: column;
-  flex-grow: 1;
-  position: relative;
-}
-
-.tabs .body .item {
-  position: absolute;
-  inset: 0;
-}
-
 .modal {
   padding: 20px 30px;
   border: 2px solid #999;
@@ -293,4 +250,17 @@ button {
 
 button:not(:disabled) {
   cursor: pointer;
+}
+
+.range {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+}
+
+.range .head {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }

@@ -1,7 +1,18 @@
+import { signalPackedStore } from '&utils/signals';
+import { t } from '@vicimpa/data-pack';
+
 const ctx = new AudioContext();
 export const gain = ctx.createGain();
-gain.gain.value = .3;
-gain.connect(ctx.destination);
+const postGain = ctx.createGain();
+gain.connect(postGain);
+postGain.connect(ctx.destination);
+postGain.gain.value = .5;
+
+export const volume = signalPackedStore('volume', t.float(32), .5);
+
+volume.subscribe(v => {
+  gain.gain.value = v;
+});
 
 function makeSound(src: string) {
   let buff: AudioBuffer | null = null;

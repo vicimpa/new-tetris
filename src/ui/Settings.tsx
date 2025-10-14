@@ -1,4 +1,6 @@
 import { Menu } from "./Menu";
+import { Range } from "./Range";
+import { Volume } from "./Volume";
 
 const InputSettings = () => (
   <Menu title="Input">
@@ -21,8 +23,9 @@ const EffectsSettings = () => (
 
 export const Settings = () => (
   <Menu title="Settings">
-    <InputSettings />
+    <Volume />
+    {/* <InputSettings />
     <AudioSettings />
-    <EffectsSettings />
+    <EffectsSettings /> */}
   </Menu>
 );
