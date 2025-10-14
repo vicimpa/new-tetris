@@ -1,6 +1,6 @@
 const ctx = new AudioContext();
 export const gain = ctx.createGain();
-
+gain.gain.value = .3;
 gain.connect(ctx.destination);
 
 function makeSound(src: string) {
