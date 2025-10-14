@@ -23,11 +23,7 @@ export class Controller {
   @prop rotateKey: string | string[] = ['ArrowUp', 'KeyW'];
   @prop holdKey: string | string[] = ['Enter', 'KeyC'];
 
-  constructor(public game: Game) { }
-
-  update() {
-    const { game } = this;
-
+  controll(game: Game) {
     if (game.isEnd)
       return;
 
@@ -55,10 +51,10 @@ export class Controller {
 }
 
 export function useController(game: Game) {
-  const ctrl = useMemo(() => new Controller(game), [game]);
+  const ctrl = useMemo(() => new Controller(), []);
 
   useEffect(() => { game.pause(); }, []);
-  useLooper(() => ctrl.update());
+  useLooper(() => ctrl.controll(game));
 
   return ctrl;
 }

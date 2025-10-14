@@ -6,6 +6,8 @@ export type HelpsProps = {
   ctrl: Controller;
 };
 
+// TODO: Перенеси представление на Controller
+
 function keys(code: string | string[]): string {
   if (Array.isArray(code))
     return code.map(keys).join(' / ');
