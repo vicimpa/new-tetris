@@ -23,17 +23,10 @@ export class Matrix {
   }
 
   setMatrix(x: number, y: number, v: Matrix) {
-    let outside = false;
-
     v.each((v, dX, dY) => {
       if (!v) return;
-      if (!this.set(x + dX, y + dY, v))
-        outside = true;
-      if (y + dY >= 20)
-        outside = true;
+      this.set(x + dX, y + dY, v);
     });
-
-    return outside;
   }
 
   getRow(y: number) {

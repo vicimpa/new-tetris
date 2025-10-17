@@ -147,14 +147,16 @@ export class Game extends Observer {
     this.now = null;
     this.canHold = true;
     this.waitTime = 0;
-    this.map.setMatrix(x, y, now);
+    const copy = clone(this.map);
+    copy.setMatrix(x, y, now);
+    this.map = copy;
   }
 
   @observe
   checkLose() {
     let lose = false;
     this.map.each((v, _x, y) => {
-      if (y < 20) return;
+      if (y < 22) return;
       if (v) lose = true;
     });
     return lose;
