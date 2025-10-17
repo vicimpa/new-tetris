@@ -129,6 +129,7 @@ export class Game extends Observer {
     this.setNow(this.holded ?? undefined);
     this.holded = now;
     this.canHold = false;
+    this.waitTime = 0;
     return true;
   }
 
