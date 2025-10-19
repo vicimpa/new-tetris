@@ -8,8 +8,7 @@ import { range } from "&utils/range";
 import { clone } from "&utils/clone";
 import { batch } from "@preact/signals-react";
 import { observe, Observer } from "./Observer";
-import { useEffect, useMemo, useState } from "react";
-import { useLooper } from "&hooks/useLooper";
+import { vec2, type Vec2 } from "@vicimpa/glm";
 
 const VALIDATE_DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]] as const;
 
@@ -36,6 +35,8 @@ export class Game extends Observer {
 
   @prop x = 0;
   @prop y = 0;
+
+  color = 0;
 
   @prop preview = {
     now: null as Figure | null,
@@ -148,9 +149,28 @@ export class Game extends Observer {
     this.now = null;
     this.canHold = true;
     this.waitTime = 0;
+    const setter = clone(now);
+    setter.each((v, x, y) => {
+      if (!v) return;
+      this.color = v;
+      setter.set(x, y, -1);
+    });
     const copy = clone(this.map);
-    copy.setMatrix(x, y, now);
+    copy.setMatrix(x, y, setter);
     this.map = copy;
+  }
+
+  @observe
+  newBlocks() {
+    const map = clone(this.map);
+    const setters = [] as Vec2[];
+    map.each((v, x, y) => {
+      if (v >= 0) return;
+      map.set(x, y, this.color);
+      setters.push(vec2(x, y));
+    });
+    this.map = map;
+    return setters;
   }
 
   @observe
@@ -175,6 +195,7 @@ export class Game extends Observer {
     if (!now) return false;
     this.toMap(now, x, y);
     this.drop();
+    this.newBlocks();
     if (this.checkLose()) {
       this.loose();
     } else {
@@ -204,7 +225,7 @@ export class Game extends Observer {
 
     for (let y = 0; y < this.map.height; y++) {
       const row = this.map.getRow(y);
-      if (row.every(e => e > 0)) {
+      if (row.every(e => e)) {
         map.set(y, row);
       };
     }
@@ -245,18 +266,4 @@ export class Game extends Observer {
   restart(regen = false) {
     if (regen) nextSeed();
   }
-}
-
-export function useGame() {
-  const [state, setState] = useState({});
-  const game = useMemo(() => new Game(), [state]);
-
-  useEffect(() => (
-    game.setNow(),
-    game.subscribe('restart', () => setState({}))
-  ), [game]);
-
-  useLooper(delta => game.update(delta));
-
-  return game;
 }

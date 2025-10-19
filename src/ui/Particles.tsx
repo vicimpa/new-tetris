@@ -5,7 +5,7 @@ import { colors } from "&data/colors";
 import { Figure } from "&core/Figure";
 import { useParticleSystem } from "&hooks/useParticleSystem";
 import { rand } from "&utils/math";
-import { vec2 } from "@vicimpa/glm";
+import { Vec2, vec2 } from "@vicimpa/glm";
 
 export type ParticlesProps = {
   size: number;
@@ -53,6 +53,20 @@ export const Particles = ({ size, game, showY, padding = 0 }: ParticlesProps) =>
     }
   );
 
+  const fix = useParticleSystem(
+    (blocks: Vec2[]) => {
+      let time = 400;
+      let total = time;
+
+      return (ctx, dt) => {
+        if ((time -= dt) < 0) return false;
+        blocks.forEach(({ x, y }) => {
+          ctx.drawBlink(x, y, size, (time / total) ** 2, .3);
+        });
+      };
+    }
+  );
+
   useEffect(() => (
     game.subscribeMany({
       dropLines(lines) {
@@ -67,6 +81,9 @@ export const Particles = ({ size, game, showY, padding = 0 }: ParticlesProps) =>
         const count = rand(1, 5) * fig.size * 10;
         figure.spawn(count, fig, x, y, game.lastY);
       },
+      newBlocks(blocks) {
+        fix.spawn(2, blocks);
+      }
     })
   ), [game]);
 
@@ -80,6 +97,7 @@ export const Particles = ({ size, game, showY, padding = 0 }: ParticlesProps) =>
         ctx.clearRect(0, 0, ctx.width, ctx.height);
         ctx.transform(1, 0, 0, -1, padding, ctx.height - padding);
         figure.render(ctx, delta);
+        fix.render(ctx, delta);
         line.render(ctx, delta);
       }}
     />

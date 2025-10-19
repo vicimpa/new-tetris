@@ -1,13 +1,9 @@
 import { prop, reactive } from "@vicimpa/decorators";
 import { observe, Observer } from "./Observer";
-import { Game } from "./Game";
-import { useEffect, useMemo } from "react";
-import { config } from "&data/config";
 import { signalPackedStore } from "&utils/signals";
 import { t } from "@vicimpa/data-pack";
-import { effect } from "@preact/signals-react";
 
-const hiscore = signalPackedStore('hiscore', t.uint(), 0);
+export const hiscoreStore = signalPackedStore('hiscore', t.uint(), 0);
 
 @reactive()
 export class Stats extends Observer {
@@ -15,7 +11,7 @@ export class Stats extends Observer {
   @prop lines = 0;
   @prop fixed = 0;
   @prop combo = 0;
-  hiscore = hiscore.peek();
+  hiscore = hiscoreStore.peek();
 
   @observe
   add(score: number) {
@@ -41,45 +37,3 @@ export class Stats extends Observer {
   }
 }
 
-export function useStats(game: Game) {
-  const stats = useMemo(() => new Stats(), [game]);
-  const { score } = config;
-
-  let lastY = Infinity;
-
-  useEffect(() => (
-    effect(() => {
-      if (hiscore.peek() < stats.score)
-        hiscore.value = stats.score;
-    })
-  ), [stats]);
-
-  useEffect(() => (
-    game.subscribeMany({
-      drop(count) {
-        const combo = stats.drop(count);
-        const base = score.drop[count];
-        const add = (score.clean[count]) * +game.map.empty();
-        const factor = score.combo[combo] ?? 1;
-        stats.add((base + add) * factor);
-      },
-      fix() {
-        stats.fix();
-      },
-      dash([f, _x, y]) {
-        f && stats.add((y - this.lastY) * score.dash);
-      },
-      move(_x, y, moved) {
-        if (!y || !moved || lastY < y)
-          return;
-        lastY = y;
-        stats.add(1);
-      },
-      setNow() {
-        lastY = Infinity;
-      }
-    })
-  ), [game]);
-
-  return stats;
-}

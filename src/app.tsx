@@ -1,5 +1,4 @@
-import { useGame } from "&core/Game";
-import { useStats } from "&core/Stats";
+
 import { useShaker } from "&hooks/useShaker";
 import { useSounds } from "&hooks/useSounds";
 import { GameMap } from "&ui/GameMap";
@@ -10,6 +9,8 @@ import { useController } from "&core/Controller";
 import { Pause } from "&ui/Pause";
 import { HoldView } from "&ui/HoldView";
 import { NextView } from "&ui/NextView";
+import { useGame } from "&hooks/useGame";
+import { useStats } from "&hooks/useStats";
 
 export const App = () => {
   const game = useGame();

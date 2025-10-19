@@ -18,6 +18,22 @@ export class Render extends CanvasRenderingContext2D {
     this.strokeRect(x * size, y * size, size, size);
   }
 
+  drawBlink(x: number, y: number, size: number, t: number, p = 1, o = 1) {
+    const top = y * size;
+    const bottom = top + size;
+    const shineY = bottom - t * size;
+
+    const grad = this.createLinearGradient(0, shineY - size * p, 0, shineY + size * p);
+    grad.addColorStop(0, "rgba(255,255,255,0)");
+    grad.addColorStop(0.5, "rgba(255,255,255,1)");
+    grad.addColorStop(1, "rgba(255,255,255,0)");
+
+    this.globalAlpha = (1 - Math.abs(t - .5) * 2) * o;
+    this.globalCompositeOperation = "lighter";
+    this.fillStyle = grad;
+    this.fillRect(x * size, y * size, size, size);
+  }
+
   drawBlock(x: number, y: number, size: number, color: string, opacity = 1) {
     this.globalAlpha = opacity;
     this.fillStyle = color;
