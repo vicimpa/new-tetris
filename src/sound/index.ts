@@ -8,7 +8,7 @@ gain.connect(postGain);
 postGain.connect(ctx.destination);
 postGain.gain.value = .5;
 
-export const volume = signalPackedStore('volume', t.float(32), .5);
+export const volume = await signalPackedStore('volume', t.float(32), .5);
 
 volume.subscribe(v => {
   gain.gain.value = v;

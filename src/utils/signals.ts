@@ -45,9 +45,9 @@ export function signalStore(name: string) {
 
 type Schema = Parameters<typeof makeDataPack>[0];
 
-function signalPackedStore<T extends Schema>(name: string, schema: T): Signal<TypeValue<T> | null>;
-function signalPackedStore<T extends Schema>(name: string, schema: T, defaultValue: TypeValue<T>): Signal<TypeValue<T>>;
-function signalPackedStore(name: string, schema: Schema, defaultValue?: any): any {
+async function signalPackedStore<T extends Schema>(name: string, schema: T): Promise<Signal<TypeValue<T> | null>>;
+async function signalPackedStore<T extends Schema>(name: string, schema: T, defaultValue: TypeValue<T>): Promise<Signal<TypeValue<T>>>;
+async function signalPackedStore(name: string, schema: Schema, defaultValue?: any) {
   const pack = makeDataPack(schema);
   const data = signal(defaultValue ?? null);
 
@@ -57,10 +57,10 @@ function signalPackedStore(name: string, schema: Schema, defaultValue?: any): an
       const buff = base64.toBuffer(str);
       const decoded = await gzip.decode(buff);
       data.value = pack.read(decoded);
-    } catch (e) { console.error(e); }
+    } catch (e) { }
   }
 
-  parse();
+  await parse();
   data.subscribe(async (value) => {
     try {
       const buff = pack.write(value);

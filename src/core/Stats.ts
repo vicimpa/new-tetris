@@ -3,7 +3,7 @@ import { observe, Observer } from "./Observer";
 import { signalPackedStore } from "&utils/signals";
 import { t } from "@vicimpa/data-pack";
 
-export const hiscoreStore = signalPackedStore('hiscore', t.uint(), 0);
+export const hiscoreStore = await signalPackedStore('hiscore', t.uint(), 0);
 
 @reactive()
 export class Stats extends Observer {
