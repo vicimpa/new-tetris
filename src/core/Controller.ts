@@ -49,12 +49,3 @@ export class Controller {
       game.move(0, -1);
   }
 }
-
-export function useController(game: Game) {
-  const ctrl = useMemo(() => new Controller(), []);
-
-  useEffect(() => { game.pause(); }, []);
-  useLooper(() => ctrl.controll(game));
-
-  return ctrl;
-}

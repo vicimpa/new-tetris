@@ -192,7 +192,8 @@ export class Game extends Observer {
   @observe
   fix() {
     const { now, x, y } = this;
-    if (!now) return false;
+    if (!now) return;
+    if (this.y !== this.lastY) return;
     this.toMap(now, x, y);
     this.drop();
     this.newBlocks();

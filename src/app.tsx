@@ -5,12 +5,12 @@ import { GameMap } from "&ui/GameMap";
 import { PopupProvider } from "&ui/Popup";
 import { StatsView } from "&ui/StatsView";
 import { Helps } from "&ui/Helps";
-import { useController } from "&core/Controller";
 import { Pause } from "&ui/Pause";
 import { HoldView } from "&ui/HoldView";
 import { NextView } from "&ui/NextView";
 import { useGame } from "&hooks/useGame";
 import { useStats } from "&hooks/useStats";
+import { useController } from "&hooks/useController";
 
 export const App = () => {
   const game = useGame();

@@ -29,12 +29,12 @@ export function useSounds(game: Game, stats: Stats) {
         },
         setLastY(v) {
           v && sound('last');
-        }
-      }),
-      stats.subscribeMany({
-        fix() {
+        },
+        toMap() {
           sound('fix');
         },
+      }),
+      stats.subscribeMany({
         drop(count, combo) {
           combo && sound(`c${clamp(combo * +!!count, 0, 3)}`);
           count && sound('drop');
