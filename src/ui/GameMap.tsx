@@ -37,12 +37,12 @@ export const GameMap = ({ game, size = 25, showY = 20 }: GameMapProps) => {
           if (!game.isLastY)
             game.now?.each((v, x, y) => {
               if (!v) return;
-              ctx.fromFilter('drop-shadow(0 0 10px #fff)', () => {
-                ctx.drawGrid(x + game.x, y + game.lastY, size, '#ffffff', 1);
-              });
+              // ctx.fromFilter('drop-shadow(0 0 10px #fff)', () => {
+              //   ctx.drawGrid(x + game.x, y + game.lastY, size, '#ffffff', 1);
+              // });
               // ctx.drawGrid(x + game.x, y + game.lastY, size, colors[v - 1] ?? '#fff', 1, 4);
               // ctx.drawGrid(x + game.x, y + game.lastY, size, '#6e6c6c', 1, 4);
-              // ctx.drawBlock(x + game.x, y + game.lastY, size, '#fff', .4);
+              ctx.drawBlock(x + game.x, y + game.lastY, size, '#fff', .4);
             });
 
           // Draw now
