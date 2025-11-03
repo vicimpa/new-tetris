@@ -6,6 +6,7 @@ import { Figure } from "&core/Figure";
 import { useParticleSystem } from "&hooks/useParticleSystem";
 import { rand } from "&utils/math";
 import { Vec2, vec2 } from "@vicimpa/glm";
+import { effects } from "&data/config";
 
 export type ParticlesProps = {
   size: number;
@@ -72,14 +73,14 @@ export const Particles = ({ size, game, showY, padding = 0 }: ParticlesProps) =>
       dropLines(lines) {
         lines.forEach((row, y) => {
           row.forEach((val, x) => {
-            line.spawn(rand(size), x, y, colors[val - 1] ?? '#fff');
+            line.spawn(rand(size) * effects.drop.value, x, y, colors[val - 1] ?? '#fff');
           });
         });
       },
       dash([fig, x, y]) {
         if (!fig) return;
         const count = rand(1, 5) * fig.size * 10;
-        figure.spawn(count, fig, x, y, game.lastY);
+        figure.spawn(count * effects.dash.value, fig, x, y, game.lastY);
       },
       newBlocks(blocks) {
         fix.spawn(2, blocks);

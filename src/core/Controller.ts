@@ -1,8 +1,24 @@
-import { useEffect, useMemo } from "react";
 import { Game } from "./Game";
-import { useLooper } from "&hooks/useLooper";
 import { keyPress, keysAxis, type KeyPressOptions } from "&utils/keyboard";
 import { prop, reactive } from "@vicimpa/decorators";
+import { signalPackedStore } from "&utils/signals";
+import { t } from "@vicimpa/data-pack";
+
+const store = await signalPackedStore('controlls', t.obj({
+  moveLeftKey: t.array(t.str()),
+  moveRightKey: t.array(t.str()),
+  softDropKey: t.array(t.str()),
+  hardDropKey: t.array(t.str()),
+  rotateKey: t.array(t.str()),
+  holdKey: t.array(t.str()),
+}), {
+  moveLeftKey: ['ArrowLeft', 'KeyA'],
+  moveRightKey: ['ArrowRight', 'KeyD'],
+  softDropKey: ['ArrowDown', 'KeyS'],
+  hardDropKey: ['Space', 'KeyX'],
+  rotateKey: ['ArrowUp', 'KeyW'],
+  holdKey: ['Enter', 'KeyC']
+});
 
 @reactive()
 export class Controller {
@@ -16,12 +32,12 @@ export class Controller {
     skip: 4,
   };
 
-  @prop moveLeftKey: string | string[] = ['ArrowLeft', 'KeyA'];
-  @prop moveRightKey: string | string[] = ['ArrowRight', 'KeyD'];
-  @prop softDropKey: string | string[] = ['ArrowDown', 'KeyS'];
-  @prop hardDropKey: string | string[] = ['Space', 'KeyX'];
-  @prop rotateKey: string | string[] = ['ArrowUp', 'KeyW'];
-  @prop holdKey: string | string[] = ['Enter', 'KeyC'];
+  @prop moveLeftKey = store.value.moveLeftKey;
+  @prop moveRightKey = store.value.moveRightKey;
+  @prop softDropKey = store.value.softDropKey;
+  @prop hardDropKey = store.value.hardDropKey;
+  @prop rotateKey = store.value.rotateKey;
+  @prop holdKey = store.value.holdKey;
 
   controll(game: Game) {
     if (game.isEnd)
@@ -47,5 +63,16 @@ export class Controller {
 
     if (keyPress(this.softDropKey, this.dropOptions))
       game.move(0, -1);
+  }
+
+  save() {
+    store.value = {
+      moveLeftKey: this.moveLeftKey,
+      moveRightKey: this.moveRightKey,
+      rotateKey: this.rotateKey,
+      hardDropKey: this.hardDropKey,
+      softDropKey: this.softDropKey,
+      holdKey: this.holdKey
+    };
   }
 }

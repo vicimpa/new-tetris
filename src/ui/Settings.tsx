@@ -1,31 +1,14 @@
 import { Menu } from "./Menu";
-import { Range } from "./Range";
-import { Volume } from "./Volume";
+import { EffectsSettings } from "./EffectsSettings";
+import { AudioSettings } from "./AudioSettings";
+import { InputSettings } from "./InputSettings";
+import type { FC } from "react";
+import type { Controller } from "&core/Controller";
 
-const InputSettings = () => (
-  <Menu title="Input">
-    <h6>Work in progress</h6>
-  </Menu>
-);
-
-const AudioSettings = () => (
-
-  <Menu title="Audio">
-    <h6>Work in progress</h6>
-  </Menu>
-);
-
-const EffectsSettings = () => (
-  <Menu title="Effects">
-    <h6>Work in progress</h6>
-  </Menu>
-);
-
-export const Settings = () => (
+export const Settings: FC<{ ctrl: Controller; }> = ({ ctrl }) => (
   <Menu title="Settings">
-    <Volume />
-    {/* <InputSettings />
+    <InputSettings ctrl={ctrl} />
     <AudioSettings />
-    <EffectsSettings /> */}
+    <EffectsSettings />
   </Menu>
 );

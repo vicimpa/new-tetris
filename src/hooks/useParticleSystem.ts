@@ -9,8 +9,8 @@ export function useParticleSystem<A extends any[]>(fn: (...args: A) => Particle)
   const maker = useEvent(fn);
 
   return useMemo(() => ({
-    spawn(size: number, ...args: A) {
-      while (size-- > 0)
+    spawn(count: number, ...args: A) {
+      while (count-- > 0)
         items.add(maker(...args));
     },
     clear() {

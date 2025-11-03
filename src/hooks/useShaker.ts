@@ -1,4 +1,5 @@
 import { Game } from "&core/Game";
+import { effects } from "&data/config";
 import { filter } from "&utils/filter";
 import { dispose } from "&utils/function";
 import { useLooper } from "./useLooper";
@@ -9,6 +10,8 @@ type ShackerRef = (<T extends HTMLElement>(current: T | null) => any) & {
   pushY(y: number): void;
   pushS(s: number): void;
 };
+
+const { shaker } = effects;
 
 export function useShaker(
   game: Game,
@@ -29,23 +32,23 @@ export function useShaker(
     dispose(
       game.subscribeMany({
         move(x, y, moved) {
-          data.x += 5 * x * +!moved;
-          data.y += 5 * y * +!moved;
+          data.x += 5 * x * +!moved * shaker.value;
+          data.y += 5 * y * +!moved * shaker.value;
         },
         fix() {
-          data.s += 5;
-          data.y -= 10;
+          data.s += 5 * shaker.value;
+          data.y -= 10 * shaker.value;
         },
         drop(count) {
-          data.s += 10 * count;
+          data.s += 10 * count * shaker.value;
         },
         dash([fig, _x, y]) {
           if (!fig) return;
-          data.y -= (y - this.lastY) * 3;
+          data.y -= (y - this.lastY) * 3 * shaker.value;
         },
         loose() {
-          data.y -= 100;
-          data.s += 200;
+          data.y -= 100 * shaker.value;
+          data.s += 200 * shaker.value;
         },
       }),
     )

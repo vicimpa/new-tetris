@@ -92,4 +92,11 @@ function keysAxisAll(neg: string[], pos?: string[]): number {
   return -keysDownAll(neg) + +keysDownAll(pos);
 }
 
+export function keyCode(code: string | string[]): string {
+  if (Array.isArray(code))
+    return code.map(keyCode).join(' / ');
+
+  return code.replace(/^(Arrow|Key)/, '');
+}
+
 export { keysAxis, keysAxisAll };

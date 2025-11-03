@@ -1,12 +1,11 @@
 import type { Game } from "&core/Game";
 import { hiscoreStore, Stats } from "&core/Stats";
-import { config } from "&data/config";
+import { score } from "&data/config";
 import { useEffect, useMemo } from "react";
 import { effect } from "@preact/signals-react";
 
 export function useStats(game: Game) {
   const stats = useMemo(() => new Stats(), [game]);
-  const { score } = config;
 
   let lastY = Infinity;
 

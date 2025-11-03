@@ -5,12 +5,14 @@ import { Settings } from "./Settings";
 import { computed } from "@preact/signals-react";
 import type { FC } from "react";
 import { real } from "@vicimpa/decorators";
+import type { Controller } from "&core/Controller";
 
 export type PauseProps = {
   game: Game;
+  ctrl: Controller;
 };
 
-export const Pause: FC<PauseProps> = ({ game }) => {
+export const Pause: FC<PauseProps> = ({ game, ctrl }) => {
   return (
     <Show when={computed(() => game.isEnd || game.isStop)}>
       <PopupView>
@@ -22,7 +24,7 @@ export const Pause: FC<PauseProps> = ({ game }) => {
           </button>
           <button onClick={() => game.restart(true)}>Next seed</button>
           <br />
-          <Settings />
+          <Settings ctrl={ctrl} />
           <br />
           <Show when={real(game, 'isStop')}>
             <button onClick={() => game.pause()}>
