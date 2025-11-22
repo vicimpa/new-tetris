@@ -1,6 +1,6 @@
 # New Tetris
 
-**New Tetris** is a modern implementation of the classic Tetris game, built using Preact and the Canvas 2D API. The project focuses on clean code, performance, and a minimalist interface.
+**New Tetris** is a modern implementation of the classic Tetris game, built using react and the Canvas 2D API. The project focuses on clean code, performance, and a minimalist interface.
 
 ---
 
